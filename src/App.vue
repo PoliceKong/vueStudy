@@ -1,16 +1,14 @@
 <template>
   <div id="app">
-    <Case></Case>
+    <router-link to="/case"></router-link>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Case from "./views/Case";
 export default {
   name: "app",
-  components: {
-    Case,
-  },
+  components: {}
 };
 </script>
 
