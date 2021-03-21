@@ -27,8 +27,9 @@ module.exports = {
 		// allow debugger during development
 		'prettier/prettier': 'error',
 		'no-var': 0, //使用let和const代替var
-		quotes: [1, `single`, 'avoid-escape'], //引号风格
+		quotes: [1, 'single', 'avoid-escape'], //引号风格
 		'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+		'max-len': [1, { code: 140 }],
 	},
 }

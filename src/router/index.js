@@ -1,28 +1,36 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Case from '../views/case'
-import RegisterCase from '../views/register_case'
-import Person from '../views/person'
-import checkcase from '../views/checkcase'
+import InquiryCase from '../views/inquiryCase'
+import indexCase from '../views/indexCase'
+import modifyCase from '../components/modifyCase'
+import suspects from '@/components/suspects'
+import addSuspect from '@/components/addSuspect'
 
 const routes = [
 	// 默认路由页面
 	{
 		path: '',
-		redirect: '/checkcase',
+		redirect: '/inquiryCase',
 	},
 	{
-		path: '/checkcase',
-		component: checkcase,
+		path: '/inquiryCase',
+		component: InquiryCase,
 	},
 	{
-		path: '/case',
-		component: Case,
+		path: '/indexCase',
+		component: indexCase,
 		children: [
-			{ path: '/register', component: RegisterCase },
 			{
-				path: '/person',
-				component: Person,
+				path: '',
+				component: modifyCase,
+			},
+			{
+				path: '/suspects',
+				component: suspects,
+			},
+			{
+				path: '/addSuspect',
+				component: addSuspect,
 			},
 		],
 	},

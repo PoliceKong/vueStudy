@@ -17,10 +17,9 @@ const caseInfo = {
 		addCase(context, data) {
 			'use strict'
 			request({ method: 'post', url: 'caseRg.do', data })
-				.then(request => {
-					if (request.state === 201) {
-						context.commit('refashCaseNum', request.data)
-						return request.data
+				.then(response => {
+					if (response.status === 201) {
+						alert('案件注册成功')
 					}
 				})
 				.catch(err => {
@@ -28,7 +27,7 @@ const caseInfo = {
 				})
 		},
 		//根据案件编号查询案件信息
-		selecCaseInfo(context) {
+		inquireCaseInfo(context) {
 			'use strict'
 			request({
 				method: 'post',
@@ -37,34 +36,35 @@ const caseInfo = {
 					CASE_NUMBER: context.state.caseNum,
 				},
 			})
-				.then(request => {
-					context.commit('refashAllCaseInfo', request.data[0])
-					console.log(
-						'查询案件信息成功，返回的数据是：',
-						request.data[0]
-					)
+				.then(response => {
+					context.commit('updateCaseNumberAllCaseInfo', response.data[0])
+					console.log('store中查询案件信息成功，返回的数据是：', response.data[0])
 				})
 				.catch(err => {
-					console.log('案件信息查询失败', err)
+					console.log('store中案件信息查询失败', err)
 				})
 		},
 	},
 	//主要做数据的绑定和更新
 	mutations: {
-		refashCaseNum(state, caseInfo) {
+		//更新案件编号和案件名称
+		updateCaseNumber(state, caseInfo) {
 			state.caseNum = caseInfo.caseNum
 			state.caseName = caseInfo.caseName
-			return caseInfo
 		},
-		refashAllCaseInfo(state, dataRes) {
+		//根据案件编号查询案件详细信息，然后更新到store
+		updateCaseNumberAllCaseInfo(state, dataRes) {
 			'use strict'
+			console.log('现在调用updateCaseNumberAllCaseInfo')
+			console.log(dataRes)
 			state.caseRes = dataRes.CASE_SOURCE
 			state.caseDate = dataRes.TIME_OF_CASE
 			state.locationC = dataRes.LOCATION_OF_CASE
 			state.moneyCount = dataRes.AMOUNT_INVOLVED //涉案金额
 			state.personCount = dataRes.NUMBER_OF_OFFENDERS //涉案人数
 			state.caseInfo = dataRes.BRIEF_INTRODUCTION
-			return dataRes
+			console.log('形参state', state)
+			console.log('this中的state', this.state)
 		},
 	},
 }

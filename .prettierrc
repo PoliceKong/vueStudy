@@ -6,7 +6,9 @@
 	"useTabs": true,
 	"bracketSpacing": true,
 	"arrowParens": "avoid",
-	"printWidth": 80,
+	"printWidth": 140,
 	"jsxBracketSameLine": true,
-	"ProseWrap": "always"
+	"ProseWrap": "always",
+	"wrapAttributes": false,
+	"htmlWhitespaceSensitivity": "ignore"
 }
