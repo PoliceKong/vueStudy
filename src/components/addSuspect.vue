@@ -842,14 +842,42 @@ export default {
 				})
 					.then(response => {
 						if (response.status === 201) {
-							alert('嫌疑人信息注册成功！' + response + this.forms.occupation)
+							alert('嫌疑人信息注册成功！' + response)
 							this.$store.commit('updateSuspectNumber', response)
+							this.registerVerdict() //注册裁决结果
 						}
 					})
 					.catch(error => {
 						alert('嫌疑人信息注册失败！' + error)
 					})
 			})
+		},
+		registerVerdict() {
+			let verdictData = {
+				TYPE_OF_PENALTY: this.forms.typeOfPenalty.toString(), //数组格式
+				PENALTY_PERIOD: this.forms.termOf, //刑罚期限
+				IS_PROBATION: this.forms.probation, //是否缓刑
+				FINE_AMOUNT: this.forms.amountOf, //罚金数额
+				IS_ILLEGAL_INCOME: this.forms.illegalIncome, //是否追缴违法所得
+				LIGHT_PLOT: this.forms.lightenThe, //从轻情节
+				SUSPECT_NUMBER: this.$store.state.suspectInfo.suspectNumber, //案件编号
+			}
+
+			request({
+				method: 'post',
+				url: 'judgResult.do',
+				data: verdictData,
+			})
+				.then(response => {
+					if (response.status === 201) {
+						//更新裁决结果编号
+						this.$store.commit('updateJudgmentNumber', response)
+						console.log(response)
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
 		},
 		resetForm() {
 			this.$refs['forms'].resetFields()
