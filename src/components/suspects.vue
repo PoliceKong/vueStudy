@@ -2,10 +2,16 @@
 	<div>
 		<el-form ref="forms" :model="forms" :rules="formsRules" label-position="left" label-width="100px">
 			<el-form-item label="嫌疑人姓名" prop="suspName">
-				<el-input v-model="forms.suspName" class="inputclass" clearable placeholder="请输入嫌疑人姓名"></el-input>
+				<el-input
+					v-model="forms.suspName"
+					class="inputclass"
+					clearable
+					placeholder="请输入嫌疑人姓名"
+					style="width: 300px;float: left"
+				></el-input>
 			</el-form-item>
 			<el-form-item label="身份类别" prop="identityCategory">
-				<el-select v-model="forms.identityCategory" class="inputclass" clearable placeholder="请选择身份类别">
+				<el-select v-model="forms.identityCategory" class="inputclass" clearable placeholder="请选择身份类别" style="float: left">
 					<el-option
 						v-for="(item, index) in identityCategoryOptions"
 						:key="index"
@@ -15,15 +21,15 @@
 					></el-option>
 				</el-select>
 			</el-form-item>
-			<el-form-item label="性别" prop="field103">
-				<el-radio-group v-model="forms.field103" size="medium">
-					<el-radio v-for="(item, index) in field103Options" :key="index" :disabled="item.disabled" :label="item.value">
+			<el-form-item label="性别" prop="sex">
+				<el-radio-group v-model="forms.sex" size="medium" style="float: left;margin-top: 13px">
+					<el-radio v-for="(item, index) in sexOptions" :key="index" :disabled="item.disabled" :label="item.value">
 						{{ item.label }}
 					</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="民族" prop="nation">
-				<el-select v-model="forms.nation" class="inputclass" clearable placeholder="请选择民族">
+				<el-select v-model="forms.nation" class="inputclass" clearable placeholder="请选择民族" style="float: left">
 					<el-option
 						v-for="(item, index) in nationOptions"
 						:key="index"
@@ -40,11 +46,12 @@
 					clearable
 					format="yyyy-MM-dd"
 					placeholder="请选择出生日期"
+					style="float: left"
 					value-format="yyyy-MM-dd"
 				></el-date-picker>
 			</el-form-item>
 			<el-form-item label="文化程度" prop="degreeOf">
-				<el-select v-model="forms.degreeOf" class="inputclass" clearable placeholder="请选择文化程度">
+				<el-select v-model="forms.degreeOf" class="inputclass" clearable placeholder="请选择文化程度" style="float: left">
 					<el-option
 						v-for="(item, index) in degreeOfOptions"
 						:key="index"
@@ -55,7 +62,7 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item label="职业" prop="occupation">
-				<el-select v-model="forms.occupation" class="inputclass" clearable placeholder="请选择职业">
+				<el-select v-model="forms.occupation" class="inputclass" clearable placeholder="请选择职业" style="float: left">
 					<el-option
 						v-for="(item, index) in occupationOptions"
 						:key="index"
@@ -66,16 +73,34 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item label="籍贯" prop="nativePlace">
-				<el-input v-model="forms.nativePlace" class="inputclass" clearable placeholder="请输入籍贯"></el-input>
+				<el-input
+					v-model="forms.nativePlace"
+					class="inputclass"
+					clearable
+					placeholder="请输入籍贯"
+					style="width: 400px;float: left"
+				></el-input>
 			</el-form-item>
 			<el-form-item label="户籍地址" prop="permanentAddress">
-				<el-input v-model="forms.permanentAddress" class="inputclass" clearable placeholder="请输入户籍地址"></el-input>
+				<el-input
+					v-model="forms.permanentAddress"
+					class="inputclass"
+					clearable
+					placeholder="请输入户籍地址"
+					style="float: left"
+				></el-input>
 			</el-form-item>
 			<el-form-item label="现住址" prop="currentAddress">
-				<el-input v-model="forms.currentAddress" class="inputclass" clearable placeholder="现住址现住址"></el-input>
+				<el-input
+					v-model="forms.currentAddress"
+					class="inputclass"
+					clearable
+					placeholder="现住址现住址"
+					style="float: left"
+				></el-input>
 			</el-form-item>
 			<el-form-item label="工作单位" prop="work">
-				<el-input v-model="forms.work" class="inputclass" clearable placeholder="工作单位"></el-input>
+				<el-input v-model="forms.work" class="inputclass" clearable placeholder="工作单位" style="float: left"></el-input>
 			</el-form-item>
 			<el-form-item label="犯罪日期" prop="crimeDay">
 				<el-date-picker
@@ -84,53 +109,104 @@
 					clearable
 					format="yyyy-MM-dd"
 					placeholder="请选择犯罪日期"
+					style="float: left"
 					value-format="yyyy-MM-dd"
 				></el-date-picker>
 			</el-form-item>
 			<el-form-item label="前科情况" prop="criminalRecord">
-				<el-input v-model="forms.criminalRecord" class="inputclass" clearable placeholder="请输入前科情况"></el-input>
+				<el-input
+					v-model="forms.criminalRecord"
+					class="inputclass"
+					clearable
+					placeholder="请输入前科情况"
+					style="float: left"
+				></el-input>
 			</el-form-item>
 			<el-form-item label="犯罪行为" prop="criminalAct">
-				<el-input v-model="forms.criminalAct" class="inputclass" clearable placeholder="请输入犯罪行为"></el-input>
+				<el-input
+					v-model="forms.criminalAct"
+					class="inputclass"
+					clearable
+					placeholder="请输入犯罪行为"
+					style="float: left"
+					type="textarea"
+					autosize
+				></el-input>
 			</el-form-item>
-			<el-form-item label="刑罚种类" prop="field117">
-				<el-checkbox-group v-model="forms.field117" :min="1" size="medium">
-					<el-checkbox v-for="(item, index) in field117Options" :key="index" :disabled="item.disabled" :label="item.value">
+			<el-form-item label="刑罚种类" prop="typeOfPenalty">
+				<el-checkbox-group v-model="forms.typeOfPenalty" :min="1" size="medium" style="float: left">
+					<el-checkbox
+						v-for="(item, index) in typeOfPenaltyOptions"
+						:key="index"
+						:disabled="item.disabled"
+						:label="item.value"
+						style="float: left"
+					>
 						{{ item.label }}
 					</el-checkbox>
 				</el-checkbox-group>
 			</el-form-item>
-			<el-form-item label="触犯罪名" prop="field118">
-				<el-checkbox-group v-model="forms.field118" :min="1" size="medium">
-					<el-checkbox v-for="(item, index) in field118Options" :key="index" :disabled="item.disabled" :label="item.value">
+			<el-form-item label="触犯罪名" prop="accusation">
+				<el-checkbox-group v-model="forms.accusation" :min="1" size="medium">
+					<el-checkbox
+						v-for="(item, index) in accusationOptions"
+						:key="index"
+						:disabled="item.disabled"
+						:label="item.value"
+						style="float: left"
+					>
 						{{ item.label }}
 					</el-checkbox>
 				</el-checkbox-group>
 			</el-form-item>
-			<el-form-item label="是否缓刑" prop="field119">
-				<el-radio-group v-model="forms.field119" size="medium">
-					<el-radio v-for="(item, index) in field119Options" :key="index" :disabled="item.disabled" :label="item.value">
+			<el-form-item label="是否缓刑" prop="probation">
+				<el-radio-group v-model="forms.probation" size="medium" style="float: left;margin-top: 13px">
+					<el-radio
+						v-for="(item, index) in probationOptions"
+						:key="index"
+						:disabled="item.disabled"
+						:label="item.value"
+						style="float: left"
+					>
 						{{ item.label }}
 					</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="罚金数额" prop="amountOf">
-				<el-input v-model="forms.amountOf" class="inputclass" clearable placeholder="请输入罚金数额">
+				<el-input
+					v-model="forms.amountOf"
+					class="inputclass"
+					clearable
+					placeholder="请输入罚金数额"
+					style="float: left;width: 300px"
+				>
 					<template slot="append">万元</template>
 				</el-input>
 			</el-form-item>
-			<el-form-item label="是否追缴违法所得" prop="field122">
-				<el-radio-group v-model="forms.field122" size="medium">
-					<el-radio v-for="(item, index) in field122Options" :key="index" :disabled="item.disabled" :label="item.value">
+			<el-form-item label="是否追缴违法所得" label-width="160px" prop="illegalIncome">
+				<el-radio-group v-model="forms.illegalIncome" size="medium" style="float: left;margin-top: 13px">
+					<el-radio
+						v-for="(item, index) in illegalIncomeOptions"
+						:key="index"
+						:disabled="item.disabled"
+						:label="item.value"
+						style="float: left"
+					>
 						{{ item.label }}
 					</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="从轻情节" prop="lightenThe">
-				<el-input v-model="forms.lightenThe" class="inputclass" clearable placeholder="请输入从轻情节"></el-input>
+				<el-input
+					v-model="forms.lightenThe"
+					class="inputclass"
+					clearable
+					placeholder="请输入从轻情节"
+					style="float: left"
+				></el-input>
 			</el-form-item>
 			<el-form-item label="刑罚期限" prop="termOf">
-				<el-input v-model="forms.termOf" class="inputclass" clearable placeholder="请输入刑罚期限">
+				<el-input v-model="forms.termOf" class="inputclass" clearable placeholder="请输入刑罚期限" style="float: left;width: 220px">
 					<template slot="append">个月</template>
 				</el-input>
 			</el-form-item>
@@ -150,7 +226,7 @@ export default {
 			forms: {
 				suspName: '',
 				identityCategory: '自然人',
-				field103: '',
+				sex: '',
 				nation: '汉族',
 				birthday: null,
 				degreeOf: '',
@@ -162,11 +238,11 @@ export default {
 				crimeDay: null,
 				criminalRecord: '',
 				criminalAct: '',
-				field117: [''],
-				field118: [],
-				field119: '',
+				typeOfPenalty: [],
+				accusation: [],
+				probation: '',
 				amountOf: '',
-				field122: '',
+				illegalIncome: '',
 				lightenThe: '',
 				termOf: '',
 			},
@@ -185,7 +261,7 @@ export default {
 						trigger: 'change',
 					},
 				],
-				field103: [
+				sex: [
 					{
 						required: true,
 						message: '性别不能为空',
@@ -215,23 +291,23 @@ export default {
 						trigger: 'blur',
 					},
 				],
-				field117: [
+				typeOfPenalty: [
 					{
 						required: true,
 						type: 'array',
-						message: '请至少选择一个field117',
+						message: '请至少选择一个刑罚种类',
 						trigger: 'change',
 					},
 				],
-				field118: [
+				accusation: [
 					{
 						required: true,
 						type: 'array',
-						message: '请至少选择一个field118',
+						message: '请至少选择一个罪名',
 						trigger: 'change',
 					},
 				],
-				field119: [
+				probation: [
 					{
 						required: true,
 						message: '是否缓刑不能为空',
@@ -239,7 +315,7 @@ export default {
 					},
 				],
 				amountOf: [],
-				field122: [],
+				illegalIncome: [],
 				lightenThe: [],
 				termOf: [],
 			},
@@ -261,7 +337,7 @@ export default {
 					value: '一般员工',
 				},
 			],
-			field103Options: [
+			sexOptions: [
 				{
 					label: '男',
 					value: '男',
@@ -581,7 +657,7 @@ export default {
 					value: '军人',
 				},
 			],
-			field117Options: [
+			typeOfPenaltyOptions: [
 				{
 					label: '管制',
 					value: '管制',
@@ -619,69 +695,71 @@ export default {
 					value: '驱逐出境',
 				},
 			],
-			field118Options: [
+			accusationOptions: [
 				{
 					label: '生产、销售不符合安全标准的食品罪',
-					value: 1,
+					value: '生产、销售不符合安全标准的食品罪',
 				},
 				{
 					label: '生产、销售有毒有害食品罪',
-					value: 2,
+					value: '生产、销售有毒有害食品罪',
 				},
 				{
 					label: '生产、销售伪劣产品罪',
-					value: 3,
+					value: '生产、销售伪劣产品罪',
 				},
 				{
 					label: '非法经营罪',
-					value: 4,
+					value: '非法经营罪',
 				},
 				{
 					label: '假冒注册商标罪',
-					value: 5,
+					value: '假冒注册商标罪',
 				},
 				{
 					label: '销售假冒注册商标的商品罪',
-					value: 6,
+					value: '销售假冒注册商标的商品罪',
 				},
 				{
 					label: '投放危险物质罪',
-					value: 7,
+					value: '投放危险物质罪',
 				},
 				{
 					label: '以危险方法危害公共安全罪',
-					value: 8,
+					value: '以危险方法危害公共安全罪',
 				},
 				{
 					label: '食品监管渎职罪',
-					value: 9,
+					value: '食品监管渎职罪',
 				},
 			],
-			field119Options: [
+			probationOptions: [
 				{
 					label: '是',
-					value: 1,
+					value: '是',
 				},
 				{
 					label: '否',
-					value: 2,
+					value: '否',
 				},
 			],
-			field122Options: [
+			illegalIncomeOptions: [
 				{
 					label: '是',
-					value: 1,
+					value: '是',
 				},
 				{
 					label: '否',
-					value: 2,
+					value: '否',
 				},
 			],
 		}
 	},
 	computed: {},
 	watch: {},
-	created() {},
+	created() {
+		this.linkSuspectInfo()
+	},
 	mounted() {},
 	methods: {
 		submitForm() {
@@ -692,6 +770,23 @@ export default {
 		},
 		resetForm() {
 			this.$refs['forms'].resetFields()
+		},
+		linkSuspectInfo() {
+			console.log('更新的数据是', this.$store.state.suspectInfo.oneSuspectInfo)
+			this.forms.suspName = this.$store.state.suspectInfo.suspName
+			alert(this.$store.state.suspectInfo.suspName)
+			this.forms.sex = this.$store.state.suspectInfo.oneSuspectInfo.sex
+			this.forms.nation = this.$store.state.suspectInfo.oneSuspectInfo.nation
+			this.forms.degreeOf = this.$store.state.suspectInfo.oneSuspectInfo.degreeOf
+			this.forms.birthday = this.$store.state.suspectInfo.oneSuspectInfo.birthday
+			this.forms.nativePlace = this.$store.state.suspectInfo.oneSuspectInfo.nativePlace
+			this.forms.permanentAddress = this.$store.state.suspectInfo.oneSuspectInfo.permanentAddress
+			this.forms.currentAddress = this.$store.state.suspectInfo.oneSuspectInfo.currentAddress
+			this.forms.work = this.$store.state.suspectInfo.oneSuspectInfo.work
+			this.forms.occupation = this.$store.state.suspectInfo.oneSuspectInfo.occupation
+			this.forms.crimeDay = this.$store.state.suspectInfo.oneSuspectInfo.crimeDay
+			this.forms.criminalRecord = this.$store.state.suspectInfo.oneSuspectInfo.criminalRecord
+			this.forms.criminalAct = this.$store.state.suspectInfo.oneSuspectInfo.criminalAct
 		},
 	},
 }

@@ -2,21 +2,31 @@
 	<div>
 		<span style="float: left;margin-top: -15px">
 			<el-button icon="el-icon-circle-plus" type="primary" @click="dialogVisible = true">添加嫌疑人</el-button>
-			<el-button icon="el-icon-delete-solid" type="warning">解除关联</el-button>
+			<el-button icon="el-icon-search" type="warning" @click="inquiryAllsuspect">更新查询</el-button>
 		</span>
 		<el-table :data="suspects" max-height="600px" style="width: 100%">
-			<el-table-column fixed label="日期" prop="date" width="150"></el-table-column>
-			<el-table-column label="姓名" prop="name" width="120"></el-table-column>
-			<el-table-column label="省份" prop="province" width="120"></el-table-column>
-			<el-table-column label="市区" prop="city" width="120"></el-table-column>
-			<el-table-column label="地址" prop="address" width="300"></el-table-column>
-			<el-table-column label="邮编" prop="zip" width="120"></el-table-column>
+			<el-table-column fixed label="嫌疑人编号" prop="SUSPECT_NUMBER" width="150"></el-table-column>
+			<el-table-column label="身份类别" prop="SUBJECT_CATEGORY" width="120"></el-table-column>
+			<el-table-column label="姓名" prop="NAME_OF_SUSPECT" width="120"></el-table-column>
+			<el-table-column label="性别" prop="SUSPECT_GENDER" width="120"></el-table-column>
+			<el-table-column label="民族" prop="NATION" width="120"></el-table-column>
+			<el-table-column label="文化程度" prop="EDUCATION" width="120"></el-table-column>
+			<el-table-column label="出生日期" prop="DATE_OF_BIRTH" width="120"></el-table-column>
+			<el-table-column label="籍贯" prop="HOMETOWN" width="120"></el-table-column>
+			<el-table-column label="户籍地址" prop="RESIDENCE_ADDRESS" width="120"></el-table-column>
+			<el-table-column label="现住址" prop="CURRENT_ADDRESS" width="120"></el-table-column>
+			<el-table-column label="工作单位" prop="EMPLOYER" width="120"></el-table-column>
+			<el-table-column label="职业" prop="OCCUPATION" width="120"></el-table-column>
+			<el-table-column label="犯罪时间" prop="CRIME_TIME" width="120"></el-table-column>
+			<el-table-column label="犯罪年龄" prop="AGE_OF_CRIME" width="120"></el-table-column>
+			<el-table-column label="前科状况" prop="CRIMINAL_HISTORY" width="120"></el-table-column>
+			<el-table-column label="犯罪行为" prop="CRIMINAL_BEHAVIOR" width="120"></el-table-column>
 			<el-table-column fixed="right" label="操作" width="120">
 				<template slot-scope="scope">
 					<el-button size="small" type="text" @click.native.prevent="deleteRow(scope.$index, suspects)">
 						移除
 					</el-button>
-					<el-button size="small" type="text">编辑</el-button>
+					<el-button size="small" type="text" @click="viewSuspectInfo(scope.$index, suspects)">查看</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -156,6 +166,8 @@
 						clearable
 						placeholder="请输入犯罪行为"
 						style="float: left"
+						type="textarea"
+						autosize
 					></el-input>
 				</el-form-item>
 				<el-form-item label="刑罚种类" prop="typeOfPenalty">
@@ -228,6 +240,8 @@
 						clearable
 						placeholder="请输入从轻情节"
 						style="float: left"
+						type="textarea"
+						autosize
 					></el-input>
 				</el-form-item>
 				<el-form-item label="刑罚期限" prop="termOf">
@@ -273,7 +287,7 @@ export default {
 				crimeDay: null,
 				criminalRecord: '',
 				criminalAct: '',
-				typeOfPenalty: [''],
+				typeOfPenalty: [],
 				accusation: [],
 				probation: '',
 				amountOf: '',
@@ -789,23 +803,18 @@ export default {
 				},
 			],
 
-			suspects: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333,
-				},
-			],
+			suspects: [],
 		}
 	},
 	computed: {},
 	watch: {},
-	created() {},
+	created() {
+		//创建时查询所有嫌疑人
+		this.inquiryAllsuspect()
+	},
 	mounted() {},
 	methods: {
+		//删除嫌疑人
 		deleteRow(index, rows) {
 			rows.splice(index, 1)
 		},
@@ -819,21 +828,21 @@ export default {
 				// 提交表单
 				let suspectData = {
 					CASE_NUMBER: this.$store.state.caseInfo.caseNum,
-					SUBJECT_CATEGORY: this.forms.identityCategory,
-					NAME_OF_SUSPECT: this.forms.suspName,
-					SUSPECT_GENDER: this.forms.sex,
-					NATION: this.forms.nation,
-					EDUCATION: this.forms.degreeOf,
-					DATE_OF_BIRTH: this.forms.birthday,
-					HOMETOWN: this.forms.nativePlace,
-					RESIDENCE_ADDRESS: this.forms.permanentAddress,
-					CURRENT_ADDRESS: this.forms.currentAddress,
-					EMPLOYER: this.forms.work,
-					OCCUPATION: this.forms.occupation,
-					CRIME_TIME: this.forms.crimeDay,
-					AGE_OF_CRIME: '99',
-					CRIMINAL_HISTORY: this.forms.criminalRecord,
-					CRIMINAL_BEHAVIOR: this.forms.criminalAct,
+					SUBJECT_CATEGORY: this.forms.identityCategory, //人员类别
+					NAME_OF_SUSPECT: this.forms.suspName, //嫌疑人姓名
+					SUSPECT_GENDER: this.forms.sex, //性别
+					NATION: this.forms.nation, //民族
+					EDUCATION: this.forms.degreeOf, //文化程度
+					DATE_OF_BIRTH: this.forms.birthday, //出生日期
+					HOMETOWN: this.forms.nativePlace, //籍贯
+					RESIDENCE_ADDRESS: this.forms.permanentAddress, //户籍地址
+					CURRENT_ADDRESS: this.forms.currentAddress, //现住址
+					EMPLOYER: this.forms.work, //工作单位
+					OCCUPATION: this.forms.occupation, //职业
+					CRIME_TIME: this.forms.crimeDay, //犯罪时间
+					AGE_OF_CRIME: '99', //犯罪年龄
+					CRIMINAL_HISTORY: this.forms.criminalRecord, //前科
+					CRIMINAL_BEHAVIOR: this.forms.criminalAct, //犯罪行为
 				}
 				request({
 					method: 'post',
@@ -852,6 +861,7 @@ export default {
 					})
 			})
 		},
+		//注册裁决结果
 		registerVerdict() {
 			let verdictData = {
 				TYPE_OF_PENALTY: this.forms.typeOfPenalty.toString(), //数组格式
@@ -881,6 +891,30 @@ export default {
 		},
 		resetForm() {
 			this.$refs['forms'].resetFields()
+		},
+		inquiryAllsuspect() {
+			request({
+				method: 'post',
+				url: 'queryAllsuspect.do',
+			})
+				.then(response => {
+					if (response.status === 200) {
+						this.suspects = response.data //返回的数据
+					} else {
+						alert('嫌疑人查询失败！')
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+		//根据嫌疑人编号查询嫌疑人的所有数据，传给store保存
+		viewSuspectInfo(index, suspects) {
+			let suspectNumber = {
+				SUSPECT_NUMBER: suspects[index].SUSPECT_NUMBER,
+			}
+			this.$store.dispatch('inquiryOneSuspectInfo', suspectNumber)
+			this.$router.push('/suspects') //跳转到嫌疑人详细信息页面
 		},
 	},
 }

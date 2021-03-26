@@ -74,7 +74,7 @@
 					<span style="float: left;margin-left: 10px">人</span>
 				</el-form-item>
 				<el-form-item label="案情简介">
-					<el-input v-model="diaCaseForm.diaCaseInfo" type="textarea"></el-input>
+					<el-input v-model="diaCaseForm.diaCaseInfo" type="textarea" autosize></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -130,7 +130,7 @@ export default {
 				})
 					.then(response => {
 						if (response.status === 201) {
-							console.log('案件注册成功')
+							// console.log('案件注册成功')
 							this.addCaseDialogVisible = false
 							alert('案件注册成功')
 							this.resetInformation()
@@ -157,9 +157,9 @@ export default {
 			}).then(response => {
 				if (response.status === 200) {
 					console.log('案件查询成功')
-					console.log('屏幕高度是', this.fullHeight)
+					// console.log('屏幕高度是', this.fullHeight)
 					this.allCaseInformation = response.data
-					console.log(this.allCaseInformation)
+					// console.log(this.allCaseInformation)
 				}
 			})
 		},

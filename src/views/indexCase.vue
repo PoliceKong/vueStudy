@@ -28,9 +28,14 @@
 
 					<el-button icon="el-icon-s-custom" plain style="font-size: 20px" type="primary" @click="toSuspects">嫌疑人</el-button>
 
-					<router-link to="/test">
-						<el-button icon="el-icon-menu" plain style="font-size: 20px" type="primary">测试</el-button>
+					<router-link to="/registeFood">
+						<el-button icon="el-icon-food" plain style="font-size: 20px" type="primary">涉案食品</el-button>
 					</router-link>
+					<router-link to="/judgments">
+						<el-button icon="el-icon-document" plain style="font-size: 20px" type="primary">判决书</el-button>
+					</router-link>
+
+					<el-button icon="el-icon-s-data" plain style="font-size: 20px" type="primary">数据分析</el-button>
 				</el-aside>
 				<el-container>
 					<el-main>
@@ -81,7 +86,7 @@
 					<span style="float: left; margin-left: 10px">人</span>
 				</el-form-item>
 				<el-form-item label="案情简介">
-					<el-input v-model="diaCaseForm.diaCaseInfo" type="textarea"></el-input>
+					<el-input v-model="diaCaseForm.diaCaseInfo" type="textarea" autosize></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -120,7 +125,7 @@ export default {
 			this.diaCaseForm.diaMoneyCount = ''
 			this.diaCaseForm.diaCaseDate = ''
 		},
-		//注册案件
+		//注册案件，调用store中的注册方法
 		addCase() {
 			if (this.diaCaseForm.diaCaseName === '') {
 				alert('请输入案件信息')
@@ -185,7 +190,7 @@ export default {
 	background-color: #d3dce6;
 	color: #eae4e4;
 	text-align: center;
-	line-height: 200px;
+	line-height: 120px;
 }
 
 .el-main {

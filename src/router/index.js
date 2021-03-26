@@ -5,6 +5,8 @@ import indexCase from '../views/indexCase'
 import modifyCase from '../components/modifyCase'
 import suspects from '@/components/suspects'
 import addSuspect from '@/components/addSuspect'
+import registeFood from '@/components/registeFood'
+import judgments from '@/components/judgments'
 
 const routes = [
 	// 默认路由页面
@@ -31,6 +33,14 @@ const routes = [
 			{
 				path: '/addSuspect',
 				component: addSuspect,
+			},
+			{
+				path: '/registeFood',
+				component: registeFood,
+			},
+			{
+				path: '/judgments',
+				component: judgments,
 			},
 		],
 	},

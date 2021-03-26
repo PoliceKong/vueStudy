@@ -70,7 +70,7 @@ export default {
 		},
 	},
 	created() {
-		console.log('前端获得的state中的数据', this.$store.state.caseInfo)
+		// console.log('前端获得的state中的数据', this.$store.state.caseInfo)
 		this.$store.dispatch('inquireCaseInfo')
 		this.disabled = false
 		// this.caseNum = this.$store.state.caseInfo.caseNum
@@ -82,7 +82,7 @@ export default {
 		// this.form.personCount = this.$store.state.caseInfo.personCount
 		// this.form.caseInfo = this.$store.state.caseInfo.caseInfo
 		this.form = this.$store.state.caseInfo
-		console.log('前端FORM数据是', this.form)
+		// console.log('前端FORM数据是', this.form)
 	},
 }
 </script>
