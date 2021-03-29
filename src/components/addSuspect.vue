@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<span style="float: left;margin-top: -15px">
-			<el-button icon="el-icon-circle-plus" type="primary" @click="dialogVisible = true">添加嫌疑人</el-button>
+			<el-button icon="el-icon-circle-plus" type="primary" @click="addSusPectDialogVisible = true">添加嫌疑人</el-button>
 			<el-button icon="el-icon-search" type="warning" @click="inquiryAllsuspect">更新查询</el-button>
 		</span>
 		<el-table :data="suspects" max-height="600px" style="width: 100%">
@@ -30,11 +30,11 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-dialog :before-close="handleClose" :visible.sync="dialogVisible" title="嫌疑人信息登记" width="50%">
-			<el-form ref="forms" :model="forms" :rules="formsRules" label-position="left" label-width="100px">
+		<el-dialog :before-close="handleClose" :visible.sync="addSusPectDialogVisible" title="嫌疑人信息登记" width="50%">
+			<el-form ref="susPectForms" :model="suspectsForms" :rules="formsRules" label-position="left" label-width="100px">
 				<el-form-item label="嫌疑人姓名" prop="suspName">
 					<el-input
-						v-model="forms.suspName"
+						v-model="suspectsForms.suspName"
 						class="inputclass"
 						clearable
 						placeholder="请输入嫌疑人姓名"
@@ -43,7 +43,7 @@
 				</el-form-item>
 				<el-form-item label="身份类别" prop="identityCategory">
 					<el-select
-						v-model="forms.identityCategory"
+						v-model="suspectsForms.identityCategory"
 						class="inputclass"
 						clearable
 						placeholder="请选择身份类别"
@@ -59,14 +59,14 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="性别" prop="sex">
-					<el-radio-group v-model="forms.sex" size="medium" style="float: left;margin-top: 13px">
+					<el-radio-group v-model="suspectsForms.sex" size="medium" style="float: left;margin-top: 13px">
 						<el-radio v-for="(item, index) in sexOptions" :key="index" :disabled="item.disabled" :label="item.value">
 							{{ item.label }}
 						</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="民族" prop="nation">
-					<el-select v-model="forms.nation" class="inputclass" clearable placeholder="请选择民族" style="float: left">
+					<el-select v-model="suspectsForms.nation" class="inputclass" clearable placeholder="请选择民族" style="float: left">
 						<el-option
 							v-for="(item, index) in nationOptions"
 							:key="index"
@@ -78,7 +78,7 @@
 				</el-form-item>
 				<el-form-item label="出生日期" prop="birthday">
 					<el-date-picker
-						v-model="forms.birthday"
+						v-model="suspectsForms.birthday"
 						class="inputclass"
 						clearable
 						format="yyyy-MM-dd"
@@ -88,7 +88,13 @@
 					></el-date-picker>
 				</el-form-item>
 				<el-form-item label="文化程度" prop="degreeOf">
-					<el-select v-model="forms.degreeOf" class="inputclass" clearable placeholder="请选择文化程度" style="float: left">
+					<el-select
+						v-model="suspectsForms.degreeOf"
+						class="inputclass"
+						clearable
+						placeholder="请选择文化程度"
+						style="float: left"
+					>
 						<el-option
 							v-for="(item, index) in degreeOfOptions"
 							:key="index"
@@ -99,7 +105,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="职业" prop="occupation">
-					<el-select v-model="forms.occupation" class="inputclass" clearable placeholder="请选择职业" style="float: left">
+					<el-select v-model="suspectsForms.occupation" class="inputclass" clearable placeholder="请选择职业" style="float: left">
 						<el-option
 							v-for="(item, index) in occupationOptions"
 							:key="index"
@@ -111,7 +117,7 @@
 				</el-form-item>
 				<el-form-item label="籍贯" prop="nativePlace">
 					<el-input
-						v-model="forms.nativePlace"
+						v-model="suspectsForms.nativePlace"
 						class="inputclass"
 						clearable
 						placeholder="请输入籍贯"
@@ -120,7 +126,7 @@
 				</el-form-item>
 				<el-form-item label="户籍地址" prop="permanentAddress">
 					<el-input
-						v-model="forms.permanentAddress"
+						v-model="suspectsForms.permanentAddress"
 						class="inputclass"
 						clearable
 						placeholder="请输入户籍地址"
@@ -129,7 +135,7 @@
 				</el-form-item>
 				<el-form-item label="现住址" prop="currentAddress">
 					<el-input
-						v-model="forms.currentAddress"
+						v-model="suspectsForms.currentAddress"
 						class="inputclass"
 						clearable
 						placeholder="现住址现住址"
@@ -137,11 +143,17 @@
 					></el-input>
 				</el-form-item>
 				<el-form-item label="工作单位" prop="work">
-					<el-input v-model="forms.work" class="inputclass" clearable placeholder="工作单位" style="float: left"></el-input>
+					<el-input
+						v-model="suspectsForms.work"
+						class="inputclass"
+						clearable
+						placeholder="工作单位"
+						style="float: left"
+					></el-input>
 				</el-form-item>
 				<el-form-item label="犯罪日期" prop="crimeDay">
 					<el-date-picker
-						v-model="forms.crimeDay"
+						v-model="suspectsForms.crimeDay"
 						class="inputclass"
 						clearable
 						format="yyyy-MM-dd"
@@ -152,7 +164,7 @@
 				</el-form-item>
 				<el-form-item label="前科情况" prop="criminalRecord">
 					<el-input
-						v-model="forms.criminalRecord"
+						v-model="suspectsForms.criminalRecord"
 						class="inputclass"
 						clearable
 						placeholder="请输入前科情况"
@@ -161,17 +173,17 @@
 				</el-form-item>
 				<el-form-item label="犯罪行为" prop="criminalAct">
 					<el-input
-						v-model="forms.criminalAct"
+						v-model="suspectsForms.criminalAct"
+						autosize
 						class="inputclass"
 						clearable
 						placeholder="请输入犯罪行为"
 						style="float: left"
 						type="textarea"
-						autosize
 					></el-input>
 				</el-form-item>
 				<el-form-item label="刑罚种类" prop="typeOfPenalty">
-					<el-checkbox-group v-model="forms.typeOfPenalty" :min="1" size="medium" style="float: left">
+					<el-checkbox-group v-model="suspectsForms.typeOfPenalty" :min="1" size="medium" style="float: left">
 						<el-checkbox
 							v-for="(item, index) in typeOfPenaltyOptions"
 							:key="index"
@@ -184,7 +196,7 @@
 					</el-checkbox-group>
 				</el-form-item>
 				<el-form-item label="触犯罪名" prop="accusation">
-					<el-checkbox-group v-model="forms.accusation" :min="1" size="medium">
+					<el-checkbox-group v-model="suspectsForms.accusation" :min="1" size="medium">
 						<el-checkbox
 							v-for="(item, index) in accusationOptions"
 							:key="index"
@@ -196,8 +208,13 @@
 						</el-checkbox>
 					</el-checkbox-group>
 				</el-form-item>
+				<el-form-item>
+					<el-button icon="el-icon-circle-plus-outline" size="medium" type="text" @click="addLegalDialog = true">
+						添加法条依据
+					</el-button>
+				</el-form-item>
 				<el-form-item label="是否缓刑" prop="probation">
-					<el-radio-group v-model="forms.probation" size="medium" style="float: left;margin-top: 13px">
+					<el-radio-group v-model="suspectsForms.probation" size="medium" style="float: left;margin-top: 13px">
 						<el-radio
 							v-for="(item, index) in probationOptions"
 							:key="index"
@@ -211,7 +228,7 @@
 				</el-form-item>
 				<el-form-item label="罚金数额" prop="amountOf">
 					<el-input
-						v-model="forms.amountOf"
+						v-model="suspectsForms.amountOf"
 						class="inputclass"
 						clearable
 						placeholder="请输入罚金数额"
@@ -221,7 +238,7 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item label="是否追缴违法所得" label-width="160px" prop="illegalIncome">
-					<el-radio-group v-model="forms.illegalIncome" size="medium" style="float: left;margin-top: 13px">
+					<el-radio-group v-model="suspectsForms.illegalIncome" size="medium" style="float: left;margin-top: 13px">
 						<el-radio
 							v-for="(item, index) in illegalIncomeOptions"
 							:key="index"
@@ -235,18 +252,18 @@
 				</el-form-item>
 				<el-form-item label="从轻情节" prop="lightenThe">
 					<el-input
-						v-model="forms.lightenThe"
+						v-model="suspectsForms.lightenThe"
+						autosize
 						class="inputclass"
 						clearable
 						placeholder="请输入从轻情节"
 						style="float: left"
 						type="textarea"
-						autosize
 					></el-input>
 				</el-form-item>
 				<el-form-item label="刑罚期限" prop="termOf">
 					<el-input
-						v-model="forms.termOf"
+						v-model="suspectsForms.termOf"
 						class="inputclass"
 						clearable
 						placeholder="请输入刑罚期限"
@@ -256,11 +273,60 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="submitForm">提交</el-button>
-					<el-button @click="resetForm">重置</el-button>
+					<el-button type="primary" @click="suspectSubmitForm">提交</el-button>
+					<el-button @click="resetSuspectForm">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
+		<el-drawer title="添加法条依据" :visible.sync="addLegalDialog" direction="ltr" custom-class="legal_drawer" ref="legal_drawer">
+			<div class="legal-drawer__content">
+				<el-form ref="legalsForm" :model="legalData" :rules="legalRules" size="medium" label-width="100px" label-position="left">
+					<ul v-for="(legal, index) in legalData.legalInfo" :key="index">
+						<el-form-item label="法案名称" prop="actName">
+							<el-select v-model="legal.actName" placeholder="请选择法案名称" clearable :style="{ width: '100%' }">
+								<el-option
+									v-for="(item, index) in actNameOptions"
+									:key="index"
+									:label="item.label"
+									:value="item.value"
+									:disabled="item.disabled"
+								></el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="条款" prop="actClauseIndex">
+							<el-input
+								v-model="legal.actClauseIndex"
+								placeholder="请输入具体条款索引，例：一百四十"
+								clearable
+								:style="{ width: '100%' }"
+							></el-input>
+						</el-form-item>
+						<el-form-item label-width="110px" label="条款详细内容" prop="legal_content">
+							<el-input
+								v-model="legal.legal_content"
+								type="textarea"
+								placeholder="请输入条款详细内容"
+								:style="{ width: '100%' }"
+							></el-input>
+						</el-form-item>
+						<el-form-item>
+							<el-button
+								circle
+								icon="el-icon-delete"
+								style="float: right;margin-right: 30px"
+								type="primary"
+								@click.prevent="removeLegal(legal)"
+							></el-button>
+						</el-form-item>
+					</ul>
+					<el-divider></el-divider>
+					<el-form-item size="large">
+						<el-button icon="el-icon-circle-plus" @click="addLegal">增加</el-button>
+						<el-button icon="el-icon-success" type="primary" @click="addLegalDialog = false">保存</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+		</el-drawer>
 	</div>
 </template>
 
@@ -271,8 +337,43 @@ export default {
 	name: 'addSuspect',
 	data() {
 		return {
-			dialogVisible: false,
-			forms: {
+			addSusPectDialogVisible: false,
+			addLegalDialog: false,
+			legalData: {
+				legalInfo: [
+					{
+						actName: '',
+						actClauseIndex: '',
+						legal_content: '',
+					},
+				],
+			},
+			legalRules: {
+				actName: [],
+				actClauseIndex: [],
+				legal_content: [],
+			},
+			actNameOptions: [
+				{
+					label: '1-《中华人民共和国刑法》',
+					value: '《中华人民共和国刑法》',
+				},
+				{
+					label: '2-《中华人民共和国刑事诉讼法》',
+					value: '《中华人民共和国刑事诉讼法》',
+				},
+				{
+					label: '3-《中华人民共和国食品安全法》',
+					value: '《中华人民共和国食品安全法》',
+				},
+				{
+					label: '4-《最高人民法院最高人民检察院关于办理危害食品安全刑事案件适用法律若干问题的解释》',
+					value: '《最高人民法院最高人民检察院关于办理危害食品安全刑事案件适用法律若干问题的解释》',
+				},
+			],
+			formLabelWidth: '80px',
+			timer: null,
+			suspectsForms: {
 				suspName: '',
 				identityCategory: '自然人',
 				sex: '',
@@ -819,57 +920,77 @@ export default {
 			rows.splice(index, 1)
 		},
 		handleClose() {
-			this.dialogVisible = false
+			this.addSusPectDialogVisible = false
 		},
-		submitForm() {
-			this.dialogVisible = false
+		suspectSubmitForm() {
+			this.addSusPectDialogVisible = false
 			this.$refs['forms'].validate(valid => {
 				if (!valid) return
 				// 提交表单
-				let suspectData = {
-					CASE_NUMBER: this.$store.state.caseInfo.caseNum,
-					SUBJECT_CATEGORY: this.forms.identityCategory, //人员类别
-					NAME_OF_SUSPECT: this.forms.suspName, //嫌疑人姓名
-					SUSPECT_GENDER: this.forms.sex, //性别
-					NATION: this.forms.nation, //民族
-					EDUCATION: this.forms.degreeOf, //文化程度
-					DATE_OF_BIRTH: this.forms.birthday, //出生日期
-					HOMETOWN: this.forms.nativePlace, //籍贯
-					RESIDENCE_ADDRESS: this.forms.permanentAddress, //户籍地址
-					CURRENT_ADDRESS: this.forms.currentAddress, //现住址
-					EMPLOYER: this.forms.work, //工作单位
-					OCCUPATION: this.forms.occupation, //职业
-					CRIME_TIME: this.forms.crimeDay, //犯罪时间
-					AGE_OF_CRIME: '99', //犯罪年龄
-					CRIMINAL_HISTORY: this.forms.criminalRecord, //前科
-					CRIMINAL_BEHAVIOR: this.forms.criminalAct, //犯罪行为
-				}
-				request({
-					method: 'post',
-					url: 'suspect.do',
-					data: suspectData,
-				})
-					.then(response => {
-						if (response.status === 201) {
-							alert('嫌疑人信息注册成功！' + response)
-							this.$store.commit('updateSuspectNumber', response)
-							this.registerVerdict() //注册裁决结果
-						}
-					})
-					.catch(error => {
-						alert('嫌疑人信息注册失败！' + error)
-					})
+				this.registerSuspectsData()
 			})
+		},
+		// legalSubmitForm() {
+		// 	this.$refs['legalsForm'].validate(valid => {
+		// 		if (valid) {
+		// 		}
+		// 	})
+		// },
+		removeLegal(legal) {
+			let index = this.legalData.legalInfo.indexOf(legal)
+			if (index !== -1) {
+				this.legalData.legalInfo.splice(index, 1)
+			}
+		},
+		addLegal() {
+			this.legalData.legalInfo.push({ actName: '', actClauseIndex: '', legal_content: '' })
+		},
+		//注册嫌疑人基本信息
+		registerSuspectsData() {
+			let suspectData = {
+				CASE_NUMBER: this.$store.state.caseInfo.caseNum,
+				SUBJECT_CATEGORY: this.suspectsForms.identityCategory, //人员类别
+				NAME_OF_SUSPECT: this.suspectsForms.suspName, //嫌疑人姓名
+				SUSPECT_GENDER: this.suspectsForms.sex, //性别
+				NATION: this.suspectsForms.nation, //民族
+				EDUCATION: this.suspectsForms.degreeOf, //文化程度
+				DATE_OF_BIRTH: this.suspectsForms.birthday, //出生日期
+				HOMETOWN: this.suspectsForms.nativePlace, //籍贯
+				RESIDENCE_ADDRESS: this.suspectsForms.permanentAddress, //户籍地址
+				CURRENT_ADDRESS: this.suspectsForms.currentAddress, //现住址
+				EMPLOYER: this.suspectsForms.work, //工作单位
+				OCCUPATION: this.suspectsForms.occupation, //职业
+				CRIME_TIME: this.suspectsForms.crimeDay, //犯罪时间
+				AGE_OF_CRIME: '99', //犯罪年龄
+				CRIMINAL_HISTORY: this.suspectsForms.criminalRecord, //前科
+				CRIMINAL_BEHAVIOR: this.suspectsForms.criminalAct, //犯罪行为
+			}
+			request({
+				method: 'post',
+				url: 'suspect.do',
+				data: suspectData,
+			})
+				.then(response => {
+					if (response.status === 201) {
+						alert('嫌疑人信息注册成功！' + response)
+						this.$store.commit('updateSuspectNumber', response)
+						this.registerVerdict() //注册裁决结果
+						this.addCrime() //注册罪名
+					}
+				})
+				.catch(error => {
+					alert('嫌疑人信息注册失败！' + error)
+				})
 		},
 		//注册裁决结果
 		registerVerdict() {
 			let verdictData = {
-				TYPE_OF_PENALTY: this.forms.typeOfPenalty.toString(), //数组格式
-				PENALTY_PERIOD: this.forms.termOf, //刑罚期限
-				IS_PROBATION: this.forms.probation, //是否缓刑
-				FINE_AMOUNT: this.forms.amountOf, //罚金数额
-				IS_ILLEGAL_INCOME: this.forms.illegalIncome, //是否追缴违法所得
-				LIGHT_PLOT: this.forms.lightenThe, //从轻情节
+				TYPE_OF_PENALTY: this.suspectsForms.typeOfPenalty.toString(), //数组格式
+				PENALTY_PERIOD: this.suspectsForms.termOf, //刑罚期限
+				IS_PROBATION: this.suspectsForms.probation, //是否缓刑
+				FINE_AMOUNT: this.suspectsForms.amountOf, //罚金数额
+				IS_ILLEGAL_INCOME: this.suspectsForms.illegalIncome, //是否追缴违法所得
+				LIGHT_PLOT: this.suspectsForms.lightenThe, //从轻情节
 				SUSPECT_NUMBER: this.$store.state.suspectInfo.suspectNumber, //案件编号
 			}
 
@@ -889,8 +1010,33 @@ export default {
 					console.log(err)
 				})
 		},
-		resetForm() {
-			this.$refs['forms'].resetFields()
+		//注册罪名信息
+		addCrime() {
+			if (this.suspectsForms.accusation.length) {
+				let crimeData = {
+					SUSPECT_NUMBER: this.$store.state.suspectInfo.suspectNumber,
+					CHARGE: '',
+				}
+				for (let index in this.suspectsForms.accusation) {
+					crimeData.CHARGE = this.suspectsForms.accusation[index]
+					request({
+						method: 'post',
+						url: 'addCrime.do',
+						data: crimeData,
+					})
+						.then(response => {
+							if (response.status === 201) {
+								console.log('罪名注册成功')
+							}
+						})
+						.catch(err => {
+							console.log('罪名注册失败', err)
+						})
+				}
+			}
+		},
+		resetSuspectForm() {
+			this.$refs['susPectForms'].resetFields()
 		},
 		inquiryAllsuspect() {
 			request({
