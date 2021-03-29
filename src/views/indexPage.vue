@@ -159,7 +159,7 @@ export default {
 					console.log('案件查询成功')
 					// console.log('屏幕高度是', this.fullHeight)
 					this.allCaseInformation = response.data
-					// console.log(this.allCaseInformation)
+					console.log(this.allCaseInformation)
 				}
 			})
 		},

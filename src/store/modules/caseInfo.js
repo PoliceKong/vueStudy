@@ -1,7 +1,7 @@
 import { request } from '@/network/request'
 
 const caseInfo = {
-	state: {
+	state: () => ({
 		caseName: '',
 		caseNum: '',
 		caseRes: '',
@@ -10,7 +10,7 @@ const caseInfo = {
 		moneyCount: '',
 		personCount: '',
 		caseInfo: '',
-	},
+	}),
 	//在action中主要做网络请求及异步操作
 	actions: {
 		//注册案件

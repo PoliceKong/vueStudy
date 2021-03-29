@@ -36,7 +36,7 @@
 				<span style="float: left; margin-left: 10px">人</span>
 			</el-form-item>
 			<el-form-item label="案情简介">
-				<el-input v-model="form.caseInfo" type="textarea"></el-input>
+				<el-input v-model="form.caseInfo" type="textarea" autosize></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="onSubmit">修改</el-button>

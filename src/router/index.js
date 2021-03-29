@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import InquiryCase from '../views/inquiryCase'
-import indexCase from '../views/indexCase'
+import InquiryCase from '../views/indexPage'
+import indexCase from '../views/mainPage'
 import modifyCase from '../components/modifyCase'
-import suspects from '@/components/suspects'
+import suspects from '@/components/viewSuspects'
 import addSuspect from '@/components/addSuspect'
 import registeFood from '@/components/registeFood'
 import judgments from '@/components/judgments'
+import watchPoisons from '@/components/watchPoisons'
 
 const routes = [
 	// 默认路由页面
@@ -37,6 +38,7 @@ const routes = [
 			{
 				path: '/registeFood',
 				component: registeFood,
+				children: [{ path: '/watchPoison', component: watchPoisons }],
 			},
 			{
 				path: '/judgments',

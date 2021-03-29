@@ -11,9 +11,12 @@
 				添加涉案食品
 			</el-button>
 			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="success">查询涉案食品</el-button>
-			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="warning">查询毒害物</el-button>
+			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="warning" @click="toWatchPoisons">
+				查询毒害物
+			</el-button>
 			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="info">查询鉴定机构</el-button>
 		</span>
+		<router-view></router-view>
 		<el-dialog
 			v-bind="$attrs"
 			v-on="$listeners"
@@ -170,12 +173,14 @@
 	</div>
 </template>
 <script>
+import { request } from '@/network/request'
 export default {
 	inheritAttrs: false,
 	components: {},
 	props: [],
 	data() {
 		return {
+			foodNumber: '',
 			addFoodDialogVisible: false,
 			poisonDialog: false,
 			formLabelWidth: '80px',
@@ -684,31 +689,67 @@ export default {
 				FOOD_INGREDIENTS: this.formData.foodIngredients,
 				FOOD_QUANTITY: this.formData.foodQuantity,
 			}
-			this.$store.dispatch('store_registerFood', foodInfo)
-			this.registerPosition()
+			request({
+				method: 'post',
+				url: 'casefood.do',
+				data: foodInfo,
+			})
+				.then(response => {
+					if (response.status === 201) {
+						console.log('涉案食品注册成功')
+						this.foodNumber = response.data.foodNumber
+						this.$store.commit('updateFoodNumber', response)
+						this.registerPosition()
+					}
+				})
+				.catch(err => {
+					console.log('涉案食品注册失败')
+					console.log(err)
+				})
 		},
 		registerPosition() {
 			let posionInfo = {
-				FOOD_NUMBER: this.$store.state.foodsInfo.foodNumber,
+				FOOD_NUMBER: this.foodNumber,
 				SCIENTIFIC_NAME_OF_POISON: '',
 				POISON_ALIAS_01: '',
 				POISON_ALIAS_02: '',
 				TOXIC_CHEMICAL_COMPOSITION: '',
 				ACTUAL_MEASUREMENT_OF_POISON: '',
 			}
-			let index = {}
 			if (this.poisonsData.poisonData.length > 0) {
-				for (index in this.poisonsData.poisonData) {
+				for (let index in this.poisonsData.poisonData) {
 					posionInfo.SCIENTIFIC_NAME_OF_POISON = this.poisonsData.poisonData[index].poisonName
-					posionInfo.POISON_ALIAS_01 = this.poisonsData.poisonData[index].posionName01
-					posionInfo.POISON_ALIAS_02 = this.poisonsData.poisonData[index].posionName02
+					posionInfo.POISON_ALIAS_01 = this.poisonsData.poisonData[index].poisonName01
+					posionInfo.POISON_ALIAS_02 = this.poisonsData.poisonData[index].poisonName02
 					posionInfo.TOXIC_CHEMICAL_COMPOSITION = this.poisonsData.poisonData[index].poisonChemical
 					posionInfo.ACTUAL_MEASUREMENT_OF_POISON = this.poisonsData.poisonData[index].poisonChemicalContent
-					this.$store.dispatch('store_registerPosion', posionInfo)
-					// console.log(index)
+					request({
+						method: 'post',
+						url: 'poison.do',
+						data: posionInfo,
+					})
+						.then(response => {
+							if (response.status === 201) {
+								console.log('毒害物注册成功')
+								this.$store.commit('updatePositionNumber', response.data.poisonNum)
+							}
+						})
+						.catch(err => {
+							console.log('注册毒害物失败')
+							console.log(err)
+						})
 				}
 			} else {
 				console.log('毒害物数据为空')
+			}
+		},
+		toWatchPoisons() {
+			if (this.$route.path !== '/watchPoison') {
+				this.$store.dispatch('inquiryPoisonData').then(() => {
+					this.$router.push('/watchPoison')
+				})
+			} else {
+				this.$store.dispatch('inquiryPoisonData')
 			}
 		},
 	},

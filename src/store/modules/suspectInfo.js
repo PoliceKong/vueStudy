@@ -1,7 +1,7 @@
 import { request } from '@/network/request'
 
 const suspectInfo = {
-	state: {
+	state: () => ({
 		suspectNumber: '',
 		judgmentNumber: '',
 		oneSuspectInfo: {
@@ -20,7 +20,7 @@ const suspectInfo = {
 			criminalRecord: '', //前科状况
 			criminalAct: '', //犯罪行为
 		},
-	},
+	}),
 	actions: {
 		//查询单个犯罪嫌疑人的详细信息
 		inquiryOneSuspectInfo(context, suspectNum) {
