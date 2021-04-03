@@ -202,7 +202,7 @@
 				</el-form-item>
 			</el-form>
 			<div slot="footer">
-				<el-button @click="close">取消</el-button>
+				<el-button @click="close">重置</el-button>
 				<el-button type="primary" @click="handelConfirm">确定</el-button>
 			</div>
 		</el-dialog>
@@ -518,7 +518,7 @@ export default {
 		// 	this.$refs['judgmentsForm'].resetFields()
 		// },
 		close() {
-			this.addJudgementDialogVisible = false
+			//this.addJudgementDialogVisible = false
 			this.$refs['judgmentsForm'].resetFields()
 			// this.$emit('update:visible', false)
 		},
@@ -526,7 +526,7 @@ export default {
 			this.$refs['judgmentsForm'].validate(valid => {
 				if (!valid) return
 				this.registerJudgment() //网络提交注册判决书信息
-				this.close()
+				this.addJudgementDialogVisible = false
 			})
 		},
 		addPublicer() {

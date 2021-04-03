@@ -332,6 +332,7 @@
 
 <script>
 import { request } from '@/network/request'
+import { getCrimeAge } from '@/network/computeAge'
 
 export default {
 	name: 'addSuspect',
@@ -924,7 +925,7 @@ export default {
 		},
 		suspectSubmitForm() {
 			this.addSusPectDialogVisible = false
-			this.$refs['forms'].validate(valid => {
+			this.$refs['susPectForms'].validate(valid => {
 				if (!valid) return
 				// 提交表单
 				this.registerSuspectsData()
@@ -961,10 +962,12 @@ export default {
 				EMPLOYER: this.suspectsForms.work, //工作单位
 				OCCUPATION: this.suspectsForms.occupation, //职业
 				CRIME_TIME: this.suspectsForms.crimeDay, //犯罪时间
-				AGE_OF_CRIME: '99', //犯罪年龄
+				AGE_OF_CRIME: getCrimeAge(this.suspectsForms.birthday, this.suspectsForms.crimeDay), //犯罪年龄
 				CRIMINAL_HISTORY: this.suspectsForms.criminalRecord, //前科
 				CRIMINAL_BEHAVIOR: this.suspectsForms.criminalAct, //犯罪行为
 			}
+			// console.log(this.DATE_OF_BIRTH, this.CRIME_TIME)
+			// suspectData.AGE_OF_CRIME = getCrimeAge(this.suspectsForms.birthday, this.suspectsForms.crimeDay)
 			request({
 				method: 'post',
 				url: 'suspect.do',
@@ -972,14 +975,15 @@ export default {
 			})
 				.then(response => {
 					if (response.status === 201) {
-						alert('嫌疑人信息注册成功！' + response)
+						alert('嫌疑人信息注册成功！')
 						this.$store.commit('updateSuspectNumber', response)
 						this.registerVerdict() //注册裁决结果
 						this.addCrime() //注册罪名
 					}
 				})
 				.catch(error => {
-					alert('嫌疑人信息注册失败！' + error)
+					alert('嫌疑人信息注册失败！')
+					console.log(error)
 				})
 		},
 		//注册裁决结果
@@ -991,7 +995,7 @@ export default {
 				FINE_AMOUNT: this.suspectsForms.amountOf, //罚金数额
 				IS_ILLEGAL_INCOME: this.suspectsForms.illegalIncome, //是否追缴违法所得
 				LIGHT_PLOT: this.suspectsForms.lightenThe, //从轻情节
-				SUSPECT_NUMBER: this.$store.state.suspectInfo.suspectNumber, //案件编号
+				SUSPECT_NUMBER: this.$store.state.suspectInfo.suspectNumber, //嫌疑人编号
 			}
 
 			request({
@@ -1003,7 +1007,8 @@ export default {
 					if (response.status === 201) {
 						//更新裁决结果编号
 						this.$store.commit('updateJudgmentNumber', response)
-						console.log(response)
+						// console.log(response)
+						this.registerLegal()
 					}
 				})
 				.catch(err => {
@@ -1032,6 +1037,38 @@ export default {
 						.catch(err => {
 							console.log('罪名注册失败', err)
 						})
+				}
+			}
+		},
+		//添加法条信息
+		registerLegal() {
+			let legalSubmitData = {
+				JUDGMENT_RESULT_NUMBER: this.$store.state.suspectInfo.judgmentNumber,
+				ACT_NAME: '',
+				ACT_CLAUSE: '',
+				LEGAL_CONTENT: '',
+			}
+			// alert(this.legalData.legalInfo.length)
+			if (this.legalData.legalInfo.length > 0) {
+				for (let index in this.legalData.legalInfo) {
+					legalSubmitData.ACT_NAME = this.legalData.legalInfo[index].actName
+					legalSubmitData.ACT_CLAUSE = this.legalData.legalInfo[index].actClauseIndex
+					legalSubmitData.LEGAL_CONTENT = this.legalData.legalInfo[index].legal_content
+					if (legalSubmitData.ACT_NAME !== '' && legalSubmitData.ACT_CLAUSE !== '') {
+						request({
+							method: 'post',
+							url: 'addLegal.do',
+							data: legalSubmitData,
+						})
+							.then(response => {
+								if (response.status === 201) {
+									console.log('法条注册成功')
+								}
+							})
+							.catch(err => {
+								console.log(err)
+							})
+					}
 				}
 			}
 		},
