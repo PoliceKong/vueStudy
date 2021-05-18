@@ -8,6 +8,7 @@ import addSuspect from '@/components/addSuspect'
 import registeFood from '@/components/registeFood'
 import judgments from '@/components/judgments'
 import watchPoisons from '@/components/watchPoisons'
+import foodListView from '@/components/foodListView'
 
 const routes = [
 	// 默认路由页面
@@ -38,7 +39,13 @@ const routes = [
 			{
 				path: '/registeFood',
 				component: registeFood,
-				children: [{ path: '/watchPoison', component: watchPoisons }],
+				children: [
+					{ path: '/watchPoison', component: watchPoisons },
+					{
+						path: '/foodListView',
+						component: foodListView,
+					},
+				],
 			},
 			{
 				path: '/judgments',

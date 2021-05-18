@@ -1103,4 +1103,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+.el-drawer.ltr {
+	overflow: auto;
+}
+</style>

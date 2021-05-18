@@ -10,7 +10,9 @@
 			>
 				添加涉案食品
 			</el-button>
-			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="success">查询涉案食品</el-button>
+			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="success" @click="selectAllFood">
+				查询涉案食品
+			</el-button>
 			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="warning" @click="toWatchPoisons">
 				查询毒害物
 			</el-button>
@@ -750,6 +752,15 @@ export default {
 				})
 			} else {
 				this.$store.dispatch('inquiryPoisonData')
+			}
+		},
+		selectAllFood() {
+			if (this.$route.path !== '/foodListView') {
+				this.$store.dispatch('inquiryAllFoodsInfo').then(() => {
+					this.$router.push('/foodListView')
+				})
+			} else {
+				this.$store.dispatch('inquiryAllFoodsInfo')
 			}
 		},
 	},

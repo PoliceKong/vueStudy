@@ -692,22 +692,24 @@ export default {
 				INVESTIGATOR_NAME: '',
 				INVESTIGATION_AGENCY_NUMBER: this.responseData.policeNum,
 			}
-			if (this.policeForm.polices.length) {
+			if (this.policeForm.polices.length > 0) {
 				for (let index in this.policeForm.polices) {
 					policeManData.INVESTIGATOR_NAME = this.policeForm.polices[index].policeName
-					request({
-						method: 'post',
-						url: 'investigation.do',
-						data: policeManData,
-					})
-						.then(response => {
-							if (response.status === 201) {
-								console.log('侦查人员注册成功')
-							}
+					if (policeManData.INVESTIGATOR_NAME) {
+						request({
+							method: 'post',
+							url: 'investigation.do',
+							data: policeManData,
 						})
-						.catch(err => {
-							console.log(err)
-						})
+							.then(response => {
+								if (response.status === 201) {
+									console.log('侦查人员注册成功')
+								}
+							})
+							.catch(err => {
+								console.log(err)
+							})
+					}
 				}
 			}
 		},
@@ -717,23 +719,25 @@ export default {
 				PUBLIC_PROSECUTOR_NAME: '',
 				PROCURATORATE_NUMBER: this.responseData.procuratorateNumber,
 			}
-			if (this.publicForm.publicers.length) {
+			if (this.publicForm.publicers.length > 0) {
 				for (let index in this.publicForm.publicers) {
 					publicerData.PUBLIC_PROSECUTOR_NAME = this.publicForm.publicers[index].publicerName
 					console.log('公诉人员姓名是', publicerData.PUBLIC_PROSECUTOR_NAME)
-					request({
-						method: 'post',
-						url: 'prosecutor.do',
-						data: publicerData,
-					})
-						.then(response => {
-							if (response.status === 201) {
-								console.log('公诉人员注册成功')
-							}
+					if (publicerData.PUBLIC_PROSECUTOR_NAME) {
+						request({
+							method: 'post',
+							url: 'prosecutor.do',
+							data: publicerData,
 						})
-						.catch(err => {
-							console.log(err)
-						})
+							.then(response => {
+								if (response.status === 201) {
+									console.log('公诉人员注册成功')
+								}
+							})
+							.catch(err => {
+								console.log(err)
+							})
+					}
 				}
 			}
 		},
@@ -744,24 +748,26 @@ export default {
 				TRIAL_STAFF_CATEGORY: '',
 				COURT_NUMBER: this.responseData.courtNumber,
 			}
-			if (this.trialStaffForm.trialStaffs.length) {
+			if (this.trialStaffForm.trialStaffs.length > 0) {
 				for (let index in this.trialStaffForm.trialStaffs) {
 					reviewerData.NAME_OF_TRIAL_OFFICER = this.trialStaffForm.trialStaffs[index].trialStaffName
 					reviewerData.TRIAL_STAFF_CATEGORY = this.trialStaffForm.trialStaffs[index].trialStaffKinds
 					console.log('审理人员姓名是', reviewerData.NAME_OF_TRIAL_OFFICER)
-					request({
-						method: 'post',
-						url: 'reviewer.do',
-						data: reviewerData,
-					})
-						.then(response => {
-							if (response.status === 201) {
-								console.log('审理人员注册成功')
-							}
+					if (reviewerData.NAME_OF_TRIAL_OFFICER) {
+						request({
+							method: 'post',
+							url: 'reviewer.do',
+							data: reviewerData,
 						})
-						.catch(err => {
-							console.log(err)
-						})
+							.then(response => {
+								if (response.status === 201) {
+									console.log('审理人员注册成功')
+								}
+							})
+							.catch(err => {
+								console.log(err)
+							})
+					}
 				}
 			}
 		},
@@ -774,19 +780,21 @@ export default {
 			if (this.clerkForm.clerks.length) {
 				for (let index in this.clerkForm.clerks) {
 					clerkData.CLERK_NAME = this.clerkForm.clerks[index].clerkName
-					request({
-						method: 'post',
-						url: 'clerk.do',
-						data: clerkData,
-					})
-						.then(response => {
-							if (response.status === 201) {
-								console.log('书记员注册成功')
-							}
+					if (clerkData.CLERK_NAME) {
+						request({
+							method: 'post',
+							url: 'clerk.do',
+							data: clerkData,
 						})
-						.catch(err => {
-							console.log(err)
-						})
+							.then(response => {
+								if (response.status === 201) {
+									console.log('书记员注册成功')
+								}
+							})
+							.catch(err => {
+								console.log(err)
+							})
+					}
 				}
 			}
 		},

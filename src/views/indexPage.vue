@@ -94,7 +94,7 @@ export default {
 		return {
 			fullHeight: '',
 			addCaseDialogVisible: false, //控制对话框显示
-			caseDate: {
+			caseData: {
 				caseNum: '', //存储案件编号，更新vuex中的案件编号
 				caseName: '',
 			},
@@ -167,9 +167,9 @@ export default {
 			rows.splice(index, 1)
 		},
 		viewCaseInformation(index, rows) {
-			this.caseDate.caseNum = rows[index].CASE_NUMBER
-			this.caseDate.caseName = rows[index].CASE_NAME
-			this.$store.commit('updateCaseNumber', this.caseDate)
+			this.caseData.caseNum = rows[index].CASE_NUMBER
+			this.caseData.caseName = rows[index].CASE_NAME
+			this.$store.commit('updateCaseNumber', this.caseData)
 			this.$router.push('/indexCase')
 		},
 	},
