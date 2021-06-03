@@ -34,8 +34,9 @@
 					<router-link to="/judgments">
 						<el-button icon="el-icon-document" plain style="font-size: 20px" type="primary">判决书</el-button>
 					</router-link>
-
-					<el-button icon="el-icon-s-data" plain style="font-size: 20px" type="primary">数据分析</el-button>
+					<router-link to="/dataAnalysis">
+						<el-button icon="el-icon-s-data" plain style="font-size: 20px" type="primary">数据分析</el-button>
+					</router-link>
 				</el-aside>
 				<el-container>
 					<el-main>
@@ -143,7 +144,6 @@ export default {
 				this.resetDiaoLogCase()
 			}
 		},
-
 		toCaseInfo() {
 			let activePath = this.$route.path
 			if (activePath === '/indexCase') {

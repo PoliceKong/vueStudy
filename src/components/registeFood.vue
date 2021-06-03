@@ -10,13 +10,15 @@
 			>
 				添加涉案食品
 			</el-button>
-			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="success" @click="selectAllFood">
+			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="success" @click="selectFoodsByCaseNum">
 				查询涉案食品
 			</el-button>
-			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="warning" @click="toWatchPoisons">
+			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="warning" @click="watchPosionDataByCaseNum">
 				查询毒害物
 			</el-button>
-			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="info">查询鉴定机构</el-button>
+			<el-button icon="el-icon-search" plain style="float: left;margin-top: -10px" type="info" @click="watchJdJgByCaseNum">
+				查询鉴定机构
+			</el-button>
 		</span>
 		<router-view></router-view>
 		<el-dialog
@@ -113,7 +115,7 @@
 					size="medium"
 					style="margin-left: 20px"
 				>
-					<ul v-for="poision in poisonsData.poisonData" :key="poision.key" class="infinite-list" style="width: 400px">
+					<ul v-for="(poision, index) in poisonsData.poisonData" :key="index" class="infinite-list" style="width: 400px">
 						<el-form-item label="毒害物学名" prop="poisonName">
 							<el-input
 								v-model="poision.poisonName"
@@ -200,7 +202,6 @@ export default {
 						poisonName02: '',
 						poisonChemical: '',
 						poisonChemicalContent: '',
-						key: Date.now(),
 					},
 				],
 			},
@@ -647,7 +648,9 @@ export default {
 	},
 	computed: {},
 	watch: {},
-	created() {},
+	created() {
+		this.selectFoodsByCaseNum()
+	},
 	mounted() {},
 	methods: {
 		onOpen() {},
@@ -674,7 +677,6 @@ export default {
 				poisonName02: '',
 				poisonChemical: '',
 				poisonChemicalContent: '',
-				key: Date.now(),
 			})
 		},
 		removePosition(item) {
@@ -725,21 +727,23 @@ export default {
 					posionInfo.POISON_ALIAS_02 = this.poisonsData.poisonData[index].poisonName02
 					posionInfo.TOXIC_CHEMICAL_COMPOSITION = this.poisonsData.poisonData[index].poisonChemical
 					posionInfo.ACTUAL_MEASUREMENT_OF_POISON = this.poisonsData.poisonData[index].poisonChemicalContent
-					request({
-						method: 'post',
-						url: 'poison.do',
-						data: posionInfo,
-					})
-						.then(response => {
-							if (response.status === 201) {
-								console.log('毒害物注册成功')
-								this.$store.commit('updatePositionNumber', response.data.poisonNum)
-							}
+					if (posionInfo.SCIENTIFIC_NAME_OF_POISON) {
+						request({
+							method: 'post',
+							url: 'poison.do',
+							data: posionInfo,
 						})
-						.catch(err => {
-							console.log('注册毒害物失败')
-							console.log(err)
-						})
+							.then(response => {
+								if (response.status === 201) {
+									console.log('毒害物注册成功')
+									this.$store.commit('updatePositionNumber', response.data.poisonNum)
+								}
+							})
+							.catch(err => {
+								console.log('注册毒害物失败')
+								console.log(err)
+							})
+					}
 				}
 			} else {
 				console.log('毒害物数据为空')
@@ -754,6 +758,15 @@ export default {
 				this.$store.dispatch('inquiryPoisonData')
 			}
 		},
+		watchPosionDataByCaseNum() {
+			if (this.$route.path !== '/watchPoison') {
+				this.$store.dispatch('inquiryPoisonDataByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum }).then(() => {
+					this.$router.push('/watchPoison')
+				})
+			} else {
+				this.$store.dispatch('inquiryPoisonDataByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+			}
+		},
 		selectAllFood() {
 			if (this.$route.path !== '/foodListView') {
 				this.$store.dispatch('inquiryAllFoodsInfo').then(() => {
@@ -761,6 +774,24 @@ export default {
 				})
 			} else {
 				this.$store.dispatch('inquiryAllFoodsInfo')
+			}
+		},
+		selectFoodsByCaseNum() {
+			if (this.$route.path !== '/foodListView') {
+				this.$store.dispatch('inquiryFoodByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum }).then(() => {
+					this.$router.push('/foodListView')
+				})
+			} else {
+				this.$store.dispatch('inquiryFoodByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+			}
+		},
+		watchJdJgByCaseNum() {
+			if (this.$route.path !== '/watchAppraisalAgency') {
+				this.$store.dispatch('inquiryJdJgDataByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum }).then(() => {
+					this.$router.push('/watchAppraisalAgency')
+				})
+			} else {
+				this.$store.dispatch('inquiryJdJgDataByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
 			}
 		},
 	},

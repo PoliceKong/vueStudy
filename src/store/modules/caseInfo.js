@@ -2,16 +2,16 @@ import { request } from '@/network/request'
 
 const caseInfo = {
 	state: () => ({
-		caseName: '',
-		caseNum: '',
-		caseRes: '',
-		caseDate: '',
-		locationC: '',
-		moneyCount: '',
-		personCount: '',
-		caseInfo: '',
+		caseName: '', //案件名称
+		caseNum: '', //案件编号
+		caseRes: '', //案件来源
+		caseDate: '', //发案时间
+		locationC: '', //发案地点
+		moneyCount: '', //涉案金额
+		personCount: '', //涉案人数
+		caseInfo: '', //简要案情
+		caseBaseInfoByCaseNum: {}, //案例基础数据
 	}),
-	//在action中主要做网络请求及异步操作
 	actions: {
 		//注册案件
 		addCase(context, data) {
@@ -20,6 +20,23 @@ const caseInfo = {
 				.then(response => {
 					if (response.status === 201) {
 						alert('案件注册成功')
+					}
+				})
+				.catch(err => {
+					return err
+				})
+		},
+		//根据案例编号更新案例基础数据
+		updateBaseCaseInfoByCaseNum(context, caseData) {
+			'use strict'
+			request({
+				method: 'post',
+				url: 'updateBaseCaseInfo.do',
+				data: caseData,
+			})
+				.then(response => {
+					if (response.status === 201) {
+						console.log('案例基础数据更新成功')
 					}
 				})
 				.catch(err => {
@@ -37,8 +54,7 @@ const caseInfo = {
 				},
 			})
 				.then(response => {
-					context.commit('updateCaseNumberAllCaseInfo', response.data[0])
-					// console.log('store中查询案件信息成功，返回的数据是：', response.data[0])
+					context.commit('updateCaseBaseInfo', response.data[0])
 				})
 				.catch(err => {
 					console.log('store中案件信息查询失败', err)
@@ -52,19 +68,9 @@ const caseInfo = {
 			state.caseNum = caseInfo.caseNum
 			state.caseName = caseInfo.caseName
 		},
-		//根据案件编号查询案件详细信息，然后更新到store
-		updateCaseNumberAllCaseInfo(state, dataRes) {
-			'use strict'
-			// console.log('现在调用updateCaseNumberAllCaseInfo')
-			// console.log(dataRes)
-			state.caseRes = dataRes.CASE_SOURCE
-			state.caseDate = dataRes.TIME_OF_CASE
-			state.locationC = dataRes.LOCATION_OF_CASE
-			state.moneyCount = dataRes.AMOUNT_INVOLVED //涉案金额
-			state.personCount = dataRes.NUMBER_OF_OFFENDERS //涉案人数
-			state.caseInfo = dataRes.BRIEF_INTRODUCTION
-			// console.log('形参state', state)
-			// console.log('this中的state', this.state)
+
+		updateCaseBaseInfo(state, caseBaseInfo) {
+			state.caseBaseInfoByCaseNum = caseBaseInfo
 		},
 	},
 }

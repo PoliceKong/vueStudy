@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-table :data="selectPoisonResult" style="width: 100%" max-height="1500">
+		<el-table :data="selectPoisonByCaseNumResult" style="width: 100%" max-height="1500">
 			<el-table-column fixed prop="POISON_NUMBER" label="毒害物编号" width="150"></el-table-column>
 			<el-table-column prop="SCIENTIFIC_NAME_OF_POISON" label="毒害物学名" width="150"></el-table-column>
 			<el-table-column prop="POISON_ALIAS_01" label="毒害别名01" width="150"></el-table-column>
@@ -12,14 +12,14 @@
 					<el-button
 						type="text"
 						size="small"
-						@click.native.prevent="regsiterAccreditationBodies(scope.$index, selectPoisonResult)"
+						@click.native.prevent="regsiterAccreditationBodies(scope.$index, selectPoisonByCaseNumResult)"
 					>
 						添加鉴定机构
 					</el-button>
 					<el-button type="text" size="small">
 						编辑
 					</el-button>
-					<el-button @click.native.prevent="deleteRow(scope.$index, selectPoisonResult)" type="text" size="small">
+					<el-button @click.native.prevent="deleteRow(scope.$index, selectPoisonByCaseNumResult)" type="text" size="small">
 						移除
 					</el-button>
 				</template>
@@ -249,6 +249,9 @@ export default {
 	computed: {
 		selectPoisonResult: function() {
 			return this.$store.state.poisonsInfo.inquiryAllPoisonData.inquiryPoisonResult
+		},
+		selectPoisonByCaseNumResult: function() {
+			return this.$store.state.poisonsInfo.byCaseNumInquiryPoisonData.byCaseNumInquiryPoisonResult
 		},
 	},
 }

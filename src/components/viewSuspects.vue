@@ -1,9 +1,16 @@
 <template>
 	<div>
-		<el-form ref="forms" :model="forms" :rules="formsRules" label-position="left" label-width="100px">
-			<el-form-item label="嫌疑人姓名" prop="suspName">
+		<el-form
+			ref="forms"
+			:model="linkSuspectInfo"
+			:rules="formsRules"
+			label-position="left"
+			label-width="100px"
+			v-bind:disabled="disabled"
+		>
+			<el-form-item label="嫌疑人姓名" prop="suspectName">
 				<el-input
-					v-model="forms.suspName"
+					v-model="linkSuspectInfo.suspectName"
 					class="inputclass"
 					clearable
 					placeholder="请输入嫌疑人姓名"
@@ -11,7 +18,13 @@
 				></el-input>
 			</el-form-item>
 			<el-form-item label="身份类别" prop="identityCategory">
-				<el-select v-model="forms.identityCategory" class="inputclass" clearable placeholder="请选择身份类别" style="float: left">
+				<el-select
+					v-model="linkSuspectInfo.identityCategory"
+					class="inputclass"
+					clearable
+					placeholder="请选择身份类别"
+					style="float: left"
+				>
 					<el-option
 						v-for="(item, index) in identityCategoryOptions"
 						:key="index"
@@ -22,14 +35,14 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item label="性别" prop="sex">
-				<el-radio-group v-model="forms.sex" size="medium" style="float: left;margin-top: 13px">
+				<el-radio-group v-model="linkSuspectInfo.sex" size="medium" style="float: left;margin-top: 13px">
 					<el-radio v-for="(item, index) in sexOptions" :key="index" :disabled="item.disabled" :label="item.value">
 						{{ item.label }}
 					</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="民族" prop="nation">
-				<el-select v-model="forms.nation" class="inputclass" clearable placeholder="请选择民族" style="float: left">
+				<el-select v-model="linkSuspectInfo.nation" class="inputclass" clearable placeholder="请选择民族" style="float: left">
 					<el-option
 						v-for="(item, index) in nationOptions"
 						:key="index"
@@ -41,7 +54,7 @@
 			</el-form-item>
 			<el-form-item label="出生日期" prop="birthday">
 				<el-date-picker
-					v-model="forms.birthday"
+					v-model="linkSuspectInfo.birthday"
 					class="inputclass"
 					clearable
 					format="yyyy-MM-dd"
@@ -51,7 +64,7 @@
 				></el-date-picker>
 			</el-form-item>
 			<el-form-item label="文化程度" prop="degreeOf">
-				<el-select v-model="forms.degreeOf" class="inputclass" clearable placeholder="请选择文化程度" style="float: left">
+				<el-select v-model="linkSuspectInfo.degreeOf" class="inputclass" clearable placeholder="请选择文化程度" style="float: left">
 					<el-option
 						v-for="(item, index) in degreeOfOptions"
 						:key="index"
@@ -62,7 +75,7 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item label="职业" prop="occupation">
-				<el-select v-model="forms.occupation" class="inputclass" clearable placeholder="请选择职业" style="float: left">
+				<el-select v-model="linkSuspectInfo.occupation" class="inputclass" clearable placeholder="请选择职业" style="float: left">
 					<el-option
 						v-for="(item, index) in occupationOptions"
 						:key="index"
@@ -74,7 +87,7 @@
 			</el-form-item>
 			<el-form-item label="籍贯" prop="nativePlace">
 				<el-input
-					v-model="forms.nativePlace"
+					v-model="linkSuspectInfo.nativePlace"
 					class="inputclass"
 					clearable
 					placeholder="请输入籍贯"
@@ -83,7 +96,7 @@
 			</el-form-item>
 			<el-form-item label="户籍地址" prop="permanentAddress">
 				<el-input
-					v-model="forms.permanentAddress"
+					v-model="linkSuspectInfo.permanentAddress"
 					class="inputclass"
 					clearable
 					placeholder="请输入户籍地址"
@@ -92,7 +105,7 @@
 			</el-form-item>
 			<el-form-item label="现住址" prop="currentAddress">
 				<el-input
-					v-model="forms.currentAddress"
+					v-model="linkSuspectInfo.currentAddress"
 					class="inputclass"
 					clearable
 					placeholder="现住址现住址"
@@ -100,11 +113,11 @@
 				></el-input>
 			</el-form-item>
 			<el-form-item label="工作单位" prop="work">
-				<el-input v-model="forms.work" class="inputclass" clearable placeholder="工作单位" style="float: left"></el-input>
+				<el-input v-model="linkSuspectInfo.work" class="inputclass" clearable placeholder="工作单位" style="float: left"></el-input>
 			</el-form-item>
 			<el-form-item label="犯罪日期" prop="crimeDay">
 				<el-date-picker
-					v-model="forms.crimeDay"
+					v-model="linkSuspectInfo.crimeDay"
 					class="inputclass"
 					clearable
 					format="yyyy-MM-dd"
@@ -115,7 +128,7 @@
 			</el-form-item>
 			<el-form-item label="前科情况" prop="criminalRecord">
 				<el-input
-					v-model="forms.criminalRecord"
+					v-model="linkSuspectInfo.criminalRecord"
 					class="inputclass"
 					clearable
 					placeholder="请输入前科情况"
@@ -124,7 +137,7 @@
 			</el-form-item>
 			<el-form-item label="犯罪行为" prop="criminalAct">
 				<el-input
-					v-model="forms.criminalAct"
+					v-model="linkSuspectInfo.criminalAct"
 					class="inputclass"
 					clearable
 					placeholder="请输入犯罪行为"
@@ -134,7 +147,7 @@
 				></el-input>
 			</el-form-item>
 			<el-form-item label="刑罚种类" prop="typeOfPenalty">
-				<el-checkbox-group v-model="forms.typeOfPenalty" :min="1" size="medium" style="float: left">
+				<el-checkbox-group v-model="linkSuspectInfo.typeOfPenalty" :min="1" size="medium" style="float: left">
 					<el-checkbox
 						v-for="(item, index) in typeOfPenaltyOptions"
 						:key="index"
@@ -147,7 +160,7 @@
 				</el-checkbox-group>
 			</el-form-item>
 			<el-form-item label="触犯罪名" prop="accusation">
-				<el-checkbox-group v-model="forms.accusation" :min="1" size="medium">
+				<el-checkbox-group v-model="linkSuspectInfo.accusation" :min="1" size="medium">
 					<el-checkbox
 						v-for="(item, index) in accusationOptions"
 						:key="index"
@@ -160,7 +173,7 @@
 				</el-checkbox-group>
 			</el-form-item>
 			<el-form-item label="是否缓刑" prop="probation">
-				<el-radio-group v-model="forms.probation" size="medium" style="float: left;margin-top: 13px">
+				<el-radio-group v-model="linkSuspectInfo.isProbation" size="medium" style="float: left;margin-top: 13px">
 					<el-radio
 						v-for="(item, index) in probationOptions"
 						:key="index"
@@ -174,7 +187,7 @@
 			</el-form-item>
 			<el-form-item label="罚金数额" prop="amountOf">
 				<el-input
-					v-model="forms.amountOf"
+					v-model="linkSuspectInfo.fineAmount"
 					class="inputclass"
 					clearable
 					placeholder="请输入罚金数额"
@@ -184,7 +197,7 @@
 				</el-input>
 			</el-form-item>
 			<el-form-item label="是否追缴违法所得" label-width="160px" prop="illegalIncome">
-				<el-radio-group v-model="forms.illegalIncome" size="medium" style="float: left;margin-top: 13px">
+				<el-radio-group v-model="linkSuspectInfo.illegalIncome" size="medium" style="float: left;margin-top: 13px">
 					<el-radio
 						v-for="(item, index) in illegalIncomeOptions"
 						:key="index"
@@ -198,7 +211,7 @@
 			</el-form-item>
 			<el-form-item label="从轻情节" prop="lightenThe">
 				<el-input
-					v-model="forms.lightenThe"
+					v-model="linkSuspectInfo.lightPlot"
 					class="inputclass"
 					clearable
 					placeholder="请输入从轻情节"
@@ -206,46 +219,30 @@
 				></el-input>
 			</el-form-item>
 			<el-form-item label="刑罚期限" prop="termOf">
-				<el-input v-model="forms.termOf" class="inputclass" clearable placeholder="请输入刑罚期限" style="float: left;width: 220px">
+				<el-input
+					v-model="linkSuspectInfo.penaltyPeriod"
+					class="inputclass"
+					clearable
+					placeholder="请输入刑罚期限"
+					style="float: left;width: 220px"
+				>
 					<template slot="append">个月</template>
 				</el-input>
 			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="submitForm">查询</el-button>
-				<el-button @click="resetForm">重置</el-button>
-			</el-form-item>
 		</el-form>
+		<el-button type="primary" @click="change">修改</el-button>
+		<el-button @click="updateForm">保存</el-button>
 	</div>
 </template>
 <script>
+import { getCrimeAge } from '@/network/computeAge'
+
 export default {
 	components: {},
 	props: [],
 	data() {
 		return {
-			forms: {
-				suspName: '',
-				identityCategory: '自然人',
-				sex: '',
-				nation: '汉族',
-				birthday: null,
-				degreeOf: '',
-				occupation: '',
-				nativePlace: '',
-				permanentAddress: '',
-				currentAddress: '',
-				work: '',
-				crimeDay: null,
-				criminalRecord: '',
-				criminalAct: '',
-				typeOfPenalty: [],
-				accusation: [],
-				probation: '',
-				amountOf: '',
-				illegalIncome: '',
-				lightenThe: '',
-				termOf: '',
-			},
+			disabled: true,
 			formsRules: {
 				suspName: [
 					{
@@ -309,7 +306,7 @@ export default {
 				],
 				probation: [
 					{
-						required: true,
+						required: false,
 						message: '是否缓刑不能为空',
 						trigger: 'change',
 					},
@@ -755,38 +752,60 @@ export default {
 			],
 		}
 	},
-	computed: {},
-	watch: {},
-	created() {
-		this.linkSuspectInfo()
+	computed: {
+		linkSuspectInfo: function() {
+			return this.$store.state.suspectInfo.oneSuspectInfo
+		},
 	},
+	watch: {},
+	created() {},
 	mounted() {},
 	methods: {
-		submitForm() {
+		change() {
+			this.disabled = false
+		},
+		updateForm() {
+			this.disabled = true
+			console.log('新填入的罪名是', this.$store.state.suspectInfo.oneSuspectInfo.accusation)
 			this.$refs['forms'].validate(valid => {
-				if (!valid) return
+				if (valid) {
+					this.$store
+						.dispatch('updateSuspectBaseInfoByNum', {
+							SUBJECT_CATEGORY: this.linkSuspectInfo.identityCategory,
+							NAME_OF_SUSPECT: this.linkSuspectInfo.suspectName,
+							SUSPECT_GENDER: this.linkSuspectInfo.sex,
+							NATION: this.linkSuspectInfo.nation,
+							EDUCATION: this.linkSuspectInfo.degreeOf,
+							DATE_OF_BIRTH: this.linkSuspectInfo.birthday,
+							HOMETOWN: this.linkSuspectInfo.nativePlace,
+							RESIDENCE_ADDRESS: this.linkSuspectInfo.permanentAddress,
+							CURRENT_ADDRESS: this.linkSuspectInfo.currentAddress,
+							EMPLOYER: this.linkSuspectInfo.work,
+							OCCUPATION: this.linkSuspectInfo.occupation,
+							CRIME_TIME: this.linkSuspectInfo.crimeDay,
+							AGE_OF_CRIME: getCrimeAge(this.linkSuspectInfo.birthday, this.linkSuspectInfo.crimeDay),
+							CRIMINAL_HISTORY: this.linkSuspectInfo.criminalRecord,
+							CRIMINAL_BEHAVIOR: this.linkSuspectInfo.criminalAct,
+							SUSPECT_NUMBER: this.linkSuspectInfo.suspectNum,
+						})
+						.then(() => {
+							this.$store.dispatch('updateJudgmentResult', {
+								JUDGMENT_RESULT_NUMBER: this.linkSuspectInfo.judgmentResultNumber,
+								TYPE_OF_PENALTY: this.linkSuspectInfo.typeOfPenalty.toString(),
+								PENALTY_PERIOD: this.linkSuspectInfo.penaltyPeriod,
+								IS_PROBATION: this.linkSuspectInfo.isProbation,
+								FINE_AMOUNT: this.linkSuspectInfo.fineAmount,
+								IS_ILLEGAL_INCOME: this.linkSuspectInfo.isIllegalIncome,
+								LIGHT_PLOT: this.linkSuspectInfo.lightPlot,
+							})
+							//this.$store.dispatch('updateChargeData', this.linkSuspectInfo.accusation)
+						})
+						.catch(err => {
+							alert('更新失败' + err)
+						})
+				}
 				// 提交表单
 			})
-		},
-		resetForm() {
-			this.$refs['forms'].resetFields()
-		},
-		linkSuspectInfo() {
-			console.log('更新的数据是', this.$store.state.suspectInfo.oneSuspectInfo)
-			this.forms.suspName = this.$store.state.suspectInfo.suspName
-			alert(this.$store.state.suspectInfo.suspName)
-			this.forms.sex = this.$store.state.suspectInfo.oneSuspectInfo.sex
-			this.forms.nation = this.$store.state.suspectInfo.oneSuspectInfo.nation
-			this.forms.degreeOf = this.$store.state.suspectInfo.oneSuspectInfo.degreeOf
-			this.forms.birthday = this.$store.state.suspectInfo.oneSuspectInfo.birthday
-			this.forms.nativePlace = this.$store.state.suspectInfo.oneSuspectInfo.nativePlace
-			this.forms.permanentAddress = this.$store.state.suspectInfo.oneSuspectInfo.permanentAddress
-			this.forms.currentAddress = this.$store.state.suspectInfo.oneSuspectInfo.currentAddress
-			this.forms.work = this.$store.state.suspectInfo.oneSuspectInfo.work
-			this.forms.occupation = this.$store.state.suspectInfo.oneSuspectInfo.occupation
-			this.forms.crimeDay = this.$store.state.suspectInfo.oneSuspectInfo.crimeDay
-			this.forms.criminalRecord = this.$store.state.suspectInfo.oneSuspectInfo.criminalRecord
-			this.forms.criminalAct = this.$store.state.suspectInfo.oneSuspectInfo.criminalAct
 		},
 	},
 }

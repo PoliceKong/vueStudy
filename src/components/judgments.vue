@@ -4,16 +4,17 @@
 			<el-button
 				icon="el-icon-circle-plus-outline"
 				style="float: left;margin-top: -10px"
-				type="primary"
+				type="success"
 				@click="addJudgementDialogVisible = true"
 			>
 				添加判决书
 			</el-button>
-			<el-button icon="el-icon-search" style="float: left;margin-top: -10px" type="success">查询审理人员</el-button>
-			<el-button icon="el-icon-search" style="float: left;margin-top: -10px" type="warning">查询公诉人员</el-button>
-			<el-button icon="el-icon-search" style="float: left;margin-top: -10px" type="info">查询侦查人员</el-button>
+			<el-button icon="el-icon-search" style="float: left;margin-top: -10px" type="primary" @click="watchJudgmentData">
+				查询判决书信息
+			</el-button>
 		</span>
-		<!--	  下面是添加判决书的显示组件dialog-->
+		<router-view></router-view>
+		<!--		下面是添加判决书的显示组件dialog-->
 		<el-dialog v-bind="$attrs" v-on="$listeners" title="登记判决书信息" :visible.sync="addJudgementDialogVisible">
 			<el-form ref="judgmentsForm" :model="judgmentData" :rules="rules" size="medium" label-width="100px" label-position="left">
 				<el-form-item label="判决书文号" prop="judgmentNumber">
@@ -511,12 +512,11 @@ export default {
 	},
 	computed: {},
 	watch: {},
-	created() {},
+	created() {
+		this.watchJudgmentData()
+	},
 	mounted() {},
 	methods: {
-		// onClose() {
-		// 	this.$refs['judgmentsForm'].resetFields()
-		// },
 		close() {
 			//this.addJudgementDialogVisible = false
 			this.$refs['judgmentsForm'].resetFields()
@@ -578,15 +578,6 @@ export default {
 				CASE_NUMBER: this.$store.state.caseInfo.caseNum, //案件编号
 			}
 			console.log('请求前', this.judgmentData)
-			// console.log(policeStationData)
-			// console.log(courtData)
-			// console.log(publiceData)
-
-			// this.$store.dispatch('registerJudgment', judgmentDatas)
-			// this.$store.dispatch('registerPoliceStation', policeStationData)
-			// this.$store.dispatch('registerCourt', courtData)
-			// this.$store.dispatch('registerPublication', publiceData)
-			//注册判决书信息
 			request({
 				method: 'post',
 				url: 'judgment.do',
@@ -649,7 +640,7 @@ export default {
 					.then(response => {
 						if (response.status === 201) {
 							console.log('公诉机关注册成功')
-							this.$store.commit('updatePuliceNum', response)
+							this.$store.commit('updatePubliceNum', response)
 							this.responseData.procuratorateNumber = response.data.procuratorateNumber
 							this.registrePublicers()
 						}
@@ -796,6 +787,22 @@ export default {
 							})
 					}
 				}
+			}
+		},
+		watchJudgmentData() {
+			if (this.$route.path !== '/watchJudgmentInfo') {
+				this.$store.dispatch('inquiryJudgmentBaseDataByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum }).then(() => {
+					this.$store.dispatch('inquiryPoliceStationInfoByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+					this.$store.dispatch('inquiryPubliceTrialStationByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+					this.$store.dispatch('inquiryCourtInfoByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+					this.$router.push('/watchJudgmentInfo')
+				})
+			} else {
+				this.$store.dispatch('inquiryJudgmentBaseDataByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum }).then(() => {
+					this.$store.dispatch('inquiryPoliceStationInfoByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+					this.$store.dispatch('inquiryPubliceTrialStationByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+					this.$store.dispatch('inquiryCourtInfoByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
+				})
 			}
 		},
 	},

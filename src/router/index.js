@@ -9,6 +9,13 @@ import registeFood from '@/components/registeFood'
 import judgments from '@/components/judgments'
 import watchPoisons from '@/components/watchPoisons'
 import foodListView from '@/components/foodListView'
+import watchAppraisalAgency from '@/components/watchAppraisalAgency'
+import watchJudgmentInfo from '@/components/watchJudgmentInfo'
+import dataAnalysis from '@/components/dataAnalysis'
+import watchAllSuspects from '@/components/watchAllSuspects'
+import watchAllFood from '@/components/watchAllFood'
+import watchAllPoisons from '@/components/watchAllPoisons'
+import watchJudgment from '@/components/watchJudgment'
 
 const routes = [
 	// 默认路由页面
@@ -45,11 +52,43 @@ const routes = [
 						path: '/foodListView',
 						component: foodListView,
 					},
+					{
+						path: '/watchAppraisalAgency',
+						component: watchAppraisalAgency,
+					},
 				],
 			},
 			{
 				path: '/judgments',
 				component: judgments,
+				children: [
+					{
+						path: '/watchJudgmentInfo',
+						component: watchJudgmentInfo,
+					},
+				],
+			},
+			{
+				path: '/dataAnalysis',
+				component: dataAnalysis,
+				children: [
+					{
+						path: '/watchAllSuspects',
+						component: watchAllSuspects,
+					},
+					{
+						path: '/watchAllFood',
+						component: watchAllFood,
+					},
+					{
+						path: '/watchAllPoisons',
+						component: watchAllPoisons,
+					},
+					{
+						path: '/watchJudgment',
+						component: watchJudgment,
+					},
+				],
 			},
 		],
 	},

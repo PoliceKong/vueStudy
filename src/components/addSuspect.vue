@@ -2,9 +2,9 @@
 	<div>
 		<span style="float: left;margin-top: -15px">
 			<el-button icon="el-icon-circle-plus" type="primary" @click="addSusPectDialogVisible = true">添加嫌疑人</el-button>
-			<el-button icon="el-icon-search" type="warning" @click="inquiryAllsuspect">更新查询</el-button>
+			<el-button icon="el-icon-search" type="warning" @click="inquirySuspectByCaseNum">更新查询</el-button>
 		</span>
-		<el-table :data="suspects" max-height="600px" style="width: 100%">
+		<el-table :data="suspectInfoByCaseNum" max-height="600px" style="width: 100%">
 			<el-table-column fixed label="嫌疑人编号" prop="SUSPECT_NUMBER" width="120"></el-table-column>
 			<el-table-column label="身份类别" prop="SUBJECT_CATEGORY" width="100"></el-table-column>
 			<el-table-column label="姓名" prop="NAME_OF_SUSPECT" width="100"></el-table-column>
@@ -23,10 +23,10 @@
 			<el-table-column label="犯罪行为" prop="CRIMINAL_BEHAVIOR" width="380"></el-table-column>
 			<el-table-column fixed="right" label="操作" width="120">
 				<template slot-scope="scope">
-					<el-button size="small" type="text" @click.native.prevent="deleteRow(scope.$index, suspects)">
+					<el-button size="small" type="text" @click.native.prevent="deleteRow(scope.$index, suspectInfoByCaseNum)">
 						移除
 					</el-button>
-					<el-button size="small" type="text" @click="viewSuspectInfo(scope.$index, suspects)">查看</el-button>
+					<el-button size="small" type="text" @click="viewSuspectInfo(scope.$index)">编辑</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -904,17 +904,20 @@ export default {
 					value: '否',
 				},
 			],
-
-			suspects: [],
 		}
 	},
-	computed: {},
-	watch: {},
-	created() {
-		//创建时查询所有嫌疑人
-		this.inquiryAllsuspect()
+	computed: {
+		//计算根据案例编号查询到的犯罪嫌疑人的数据
+		suspectInfoByCaseNum: function() {
+			return this.$store.state.suspectInfo.suspectInfoByCaseNum.suspectDataByCaseNum
+		},
 	},
-	mounted() {},
+
+	created() {
+		//创建时根据案例编号查询本案中的所有嫌疑人
+		this.inquirySuspectByCaseNum()
+	},
+
 	methods: {
 		//删除嫌疑人
 		deleteRow(index, rows) {
@@ -931,12 +934,7 @@ export default {
 				this.registerSuspectsData()
 			})
 		},
-		// legalSubmitForm() {
-		// 	this.$refs['legalsForm'].validate(valid => {
-		// 		if (valid) {
-		// 		}
-		// 	})
-		// },
+
 		removeLegal(legal) {
 			let index = this.legalData.legalInfo.indexOf(legal)
 			if (index !== -1) {
@@ -949,7 +947,7 @@ export default {
 		//注册嫌疑人基本信息
 		registerSuspectsData() {
 			let suspectData = {
-				CASE_NUMBER: this.$store.state.caseInfo.caseNum,
+				CASE_NUMBER: this.$store.state.caseInfo.caseNum, //获取案例编号
 				SUBJECT_CATEGORY: this.suspectsForms.identityCategory, //人员类别
 				NAME_OF_SUSPECT: this.suspectsForms.suspName, //嫌疑人姓名
 				SUSPECT_GENDER: this.suspectsForms.sex, //性别
@@ -966,8 +964,6 @@ export default {
 				CRIMINAL_HISTORY: this.suspectsForms.criminalRecord, //前科
 				CRIMINAL_BEHAVIOR: this.suspectsForms.criminalAct, //犯罪行为
 			}
-			// console.log(this.DATE_OF_BIRTH, this.CRIME_TIME)
-			// suspectData.AGE_OF_CRIME = getCrimeAge(this.suspectsForms.birthday, this.suspectsForms.crimeDay)
 			request({
 				method: 'post',
 				url: 'suspect.do',
@@ -1007,7 +1003,6 @@ export default {
 					if (response.status === 201) {
 						//更新裁决结果编号
 						this.$store.commit('updateJudgmentNumber', response)
-						// console.log(response)
 						this.registerLegal()
 					}
 				})
@@ -1023,7 +1018,7 @@ export default {
 					CHARGE: '',
 				}
 				for (let index in this.suspectsForms.accusation) {
-					crimeData.CHARGE = this.suspectsForms.accusation[index]
+					crimeData.CHARGE = this.suspectsForms.accusation[index] //循环查询涉及的所有罪名，单个的注册到数据库中
 					request({
 						method: 'post',
 						url: 'addCrime.do',
@@ -1048,7 +1043,6 @@ export default {
 				ACT_CLAUSE: '',
 				LEGAL_CONTENT: '',
 			}
-			// alert(this.legalData.legalInfo.length)
 			if (this.legalData.legalInfo.length > 0) {
 				for (let index in this.legalData.legalInfo) {
 					legalSubmitData.ACT_NAME = this.legalData.legalInfo[index].actName
@@ -1075,6 +1069,7 @@ export default {
 		resetSuspectForm() {
 			this.$refs['susPectForms'].resetFields()
 		},
+		//查询所有的犯罪嫌疑人的数据
 		inquiryAllsuspect() {
 			request({
 				method: 'post',
@@ -1091,13 +1086,16 @@ export default {
 					console.log(err)
 				})
 		},
-		//根据嫌疑人编号查询嫌疑人的所有数据，传给store保存
-		viewSuspectInfo(index, suspects) {
-			let suspectNumber = {
-				SUSPECT_NUMBER: suspects[index].SUSPECT_NUMBER,
-			}
-			this.$store.dispatch('inquiryOneSuspectInfo', suspectNumber)
+		//根据嫌疑人编号查询单个嫌疑人的数据，传给store保存
+		viewSuspectInfo(index) {
+			this.$store.commit('updateSuspectInfoBySuspectNum', index)
+			this.$store.dispatch('inquiryJudgMentResultBySuspectId', index) //更新裁决结构的数据
+			this.$store.dispatch('inquiryChargeBySuspectNum', index) //更新罪名
 			this.$router.push('/suspects') //跳转到嫌疑人详细信息页面
+		},
+		//根据案例编号查询犯罪嫌疑人数据
+		inquirySuspectByCaseNum() {
+			this.$store.dispatch('inquirySuspectDataByCaseNum', { CASE_NUMBER: this.$store.state.caseInfo.caseNum })
 		},
 	},
 }
